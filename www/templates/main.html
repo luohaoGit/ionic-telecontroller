@@ -1,0 +1,27 @@
+<style type="text/css">
+  .target {
+    display: inline-block;
+    width: 450px;
+    height: 450px;
+    margin: 20px;
+    text-align: center;
+    color: white;
+    background-color: #444;
+  }
+</style>
+
+<ion-view view-title="主面板">
+  <ion-content scroll="false">
+    <div class="target"
+         hm-pan = "onHammer"
+         hm-tap = "onHammer"
+         hm-doubletap = "onHammer"
+         hm-press = "onHammer"
+         hm-swipe
+         hm-recognizer-options='{"stopPropagation":true}'}
+         >
+      <div>{{command.deltaX}}@{{command.deltaY}}@{{command.code}}</div>
+      <div>{{preX}}@{{preY}}</div>
+    </div>
+  </ion-content>
+</ion-view>

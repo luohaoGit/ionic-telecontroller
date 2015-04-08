@@ -1,4 +1,4 @@
-angular.module('starter.controllers', [])
+angular.module('starter.controllers', ['hmTouchEvents'])
 
 .controller('AppCtrl', function($scope, $ionicModal, $timeout) {
   // Form data for the login modal
@@ -45,4 +45,32 @@ angular.module('starter.controllers', [])
 })
 
 .controller('PlaylistCtrl', function($scope, $stateParams) {
+})
+
+.controller('MainCtrl', function($scope, $stateParams) {
+  $scope.command = {};
+  $scope.preX = 0;
+  $scope.preY = 0;
+  $scope.onHammer = function (event) {
+    var type = event.type;
+    if(type == 'pan') {
+      var x = event.srcEvent.x;
+      var y = event.srcEvent.y;
+      $scope.command.deltaX = x - $scope.preX;
+      $scope.command.deltaY = y - $scope.preY;
+      $scope.preX = x;
+      $scope.preY = y;
+      $scope.command.code = 2;
+      if(event.isFinal){
+        $scope.preX = 0;
+        $scope.preY = 0;
+      }
+    }else if(type == 'tap'){
+      $scope.command.code = 3;
+    }else if(type == 'doubletap'){
+      $scope.command.code = 4;
+    }else if(type == 'press'){
+      $scope.command.code = 5;
+    }
+  };
 });
