@@ -1,6 +1,6 @@
 angular.module('starter.controllers', ['hmTouchEvents'])
 
-.controller('AppCtrl', function($scope, $ionicModal, $timeout) {
+.controller('AppCtrl', function($scope, $ionicModal, $timeout, websocket, $ionicLoading, $ionicPopup) {
   // Form data for the login modal
   $scope.loginData = {};
 
@@ -25,11 +25,24 @@ angular.module('starter.controllers', ['hmTouchEvents'])
   $scope.doLogin = function() {
     console.log('Doing login', $scope.loginData);
 
-    // Simulate a login delay. Remove this and replace with your login
-    // code if using a login system
-    $timeout(function() {
+    $ionicLoading.show({
+      template: '正在连接...'
+    });
+
+    var wsUri = 'ws://' + $scope.loginData.ip;
+    websocket.open(wsUri).then(function(){
+      $ionicLoading.hide();
       $scope.closeLogin();
-    }, 1000);
+    }, function(){
+      $ionicLoading.hide();
+      $ionicPopup.alert({
+        title: '温馨提示',
+        template: '连接失败！',
+        okText: '知道了'
+      }).then(function(res){
+
+      });
+    });
   };
 })
 
@@ -72,16 +85,16 @@ angular.module('starter.controllers', ['hmTouchEvents'])
     }else if(type == 'press'){
       $scope.command.code = 100;
     }else if(type == 'panup'){
-      $scope.command.code = 99;
+      $scope.command.code = 17;
       $scope.showout = type + ":" + new Date().getTime();
     }else if(type == 'pandown'){
-      $scope.command.code = 99;
+      $scope.command.code = 18;
       $scope.showout = type + ":" + new Date().getTime();
     }else if(type == 'panleft'){
-      $scope.command.code = 99;
+      $scope.command.code = 19;
       $scope.showout = type + ":" + new Date().getTime();
     }else if(type == 'panright'){
-      $scope.command.code = 99;
+      $scope.command.code = 20;
       $scope.showout = type + ":" + new Date().getTime();
     }
   };
