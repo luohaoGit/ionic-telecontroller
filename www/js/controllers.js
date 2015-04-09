@@ -49,21 +49,20 @@ angular.module('starter.controllers', ['hmTouchEvents'])
 
 .controller('MainCtrl', function($scope, $stateParams) {
   $scope.command = {};
-  $scope.preX = 0;
-  $scope.preY = 0;
-  $scope.onHammer = function (event) {
+  $scope.deltaX = 0;
+  $scope.deltaY = 0;
+  $scope.onHammer = function(event) {
     var type = event.type;
+    console.log(type)
     if(type == 'pan') {
-      var x = event.srcEvent.x;
-      var y = event.srcEvent.y;
-      $scope.command.deltaX = x - $scope.preX;
-      $scope.command.deltaY = y - $scope.preY;
-      $scope.preX = x;
-      $scope.preY = y;
+      $scope.command.deltaX = event.deltaX - $scope.deltaX;
+      $scope.command.deltaY = event.deltaY - $scope.deltaY;
       $scope.command.code = 2;
+      $scope.deltaX = event.deltaX;
+      $scope.deltaY = event.deltaY;
       if(event.isFinal){
-        $scope.preX = 0;
-        $scope.preY = 0;
+        $scope.deltaX = 0;
+        $scope.deltaY = 0;
       }
     }else if(type == 'tap'){
       $scope.command.code = 3;
