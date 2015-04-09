@@ -1,24 +1,75 @@
 <style type="text/css">
   .target {
     display: inline-block;
-    width: 450px;
-    height: 450px;
-    margin: 20px;
+    margin: auto;
     text-align: center;
     color: white;
+    background-color: #444;
+  }
+
+  .allbtn {
+    width: 100%;
+    float: left;
+  }
+
+  .wrapper {
+    float: left;
+    text-align:center;
+    margin: auto;
+  }
+
+  .leftbtn {
+    float: left;
+  }
+
+  .midbtn {
+    float: left;
+  }
+
+  .rightbtn {
+    float: left;
+  }
+
+  .wheel {
     background-color: #444;
   }
 </style>
 
 <ion-view view-title="主面板">
   <ion-content scroll="false">
-    <div class="target"
-         hm-pan = "onHammer"
-         hm-doubletap = "onHammer"
-         hm-tap = "onHammer"
-         hm-press = "onHammer"
-         >
-      <div>{{command.deltaX}}@{{command.deltaY}}@{{command.code}}</div>
+    <div class="row responsive-sm">
+      <div class="col col-50 target"
+           hm-pan = "onHammer"
+           hm-doubletap = "onHammer"
+           hm-tap = "onHammer"
+           hm-press = "onHammer">
+          <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+          <div>{{command.deltaX}}@{{command.deltaY}}@{{command.code}}@{{showout}}</div>
+      </div>
     </div>
+    <div class="allbtn">
+        <div class="wrapper">
+            <div class="leftbtn">
+                <button class="button button-large button-dark" ng-click="clickHandle(0)">
+                    左键
+                </button>
+            </div>
+            <div class="midbtn">
+                <div hm-panleft = "onHammer"
+                     hm-panright = "onHammer"
+                     hm-pandown = "onHammer"
+                     hm-panup = "onHammer"
+                     class="wheel">
+                    滚轮滚轮滚轮滚轮滚轮滚轮滚轮<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+                </div>
+            </div>
+            <div class="rightbtn">
+                <button class="button button-large button-dark" ng-click="clickHandle(1)">
+                    右键
+                </button>
+            </div>
+        </div>
+    </div>
+
   </ion-content>
 </ion-view>

@@ -51,6 +51,7 @@ angular.module('starter.controllers', ['hmTouchEvents'])
   $scope.command = {};
   $scope.deltaX = 0;
   $scope.deltaY = 0;
+  $scope.showout = '';
   $scope.onHammer = function(event) {
     var type = event.type;
     if(type == 'pan') {
@@ -67,8 +68,29 @@ angular.module('starter.controllers', ['hmTouchEvents'])
       $scope.command.code = 3;
     }else if(type == 'doubletap'){
       $scope.command.code = 4;
+      $scope.showout = type + ":" + new Date().getTime();
     }else if(type == 'press'){
-      $scope.command.code = '100';
+      $scope.command.code = 100;
+    }else if(type == 'panup'){
+      $scope.command.code = 99;
+      $scope.showout = type + ":" + new Date().getTime();
+    }else if(type == 'pandown'){
+      $scope.command.code = 99;
+      $scope.showout = type + ":" + new Date().getTime();
+    }else if(type == 'panleft'){
+      $scope.command.code = 99;
+      $scope.showout = type + ":" + new Date().getTime();
+    }else if(type == 'panright'){
+      $scope.command.code = 99;
+      $scope.showout = type + ":" + new Date().getTime();
     }
   };
+
+  $scope.clickHandle = function(type) {
+    if(type == 0){
+      $scope.command.code = 3;
+    }else if(type == 1){
+      $scope.command.code = 101;
+    }
+  }
 });
