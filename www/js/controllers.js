@@ -53,7 +53,6 @@ angular.module('starter.controllers', ['hmTouchEvents'])
   $scope.deltaY = 0;
   $scope.onHammer = function(event) {
     var type = event.type;
-    console.log(type)
     if(type == 'pan') {
       $scope.command.deltaX = event.deltaX - $scope.deltaX;
       $scope.command.deltaY = event.deltaY - $scope.deltaY;
@@ -69,7 +68,7 @@ angular.module('starter.controllers', ['hmTouchEvents'])
     }else if(type == 'doubletap'){
       $scope.command.code = 4;
     }else if(type == 'press'){
-      $scope.command.code = 5;
+      $scope.command.code = '100';
     }
   };
 });
