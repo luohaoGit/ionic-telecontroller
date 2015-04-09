@@ -1,12 +1,9 @@
 angular.module('starter.services', [])
-    .factory('websocket', function ($websocket, $q) {
+    .factory('$websocket', function ($q) {
 
         var ws;
 
         return {
-            status: function() {
-                return ws.readyState;
-            },
             send: function(message) {
                 if (angular.isString(message)) {
                     ws.send(message);
@@ -17,39 +14,32 @@ angular.module('starter.services', [])
             open: function(wsUri){
                 var deferred = $q.defer();
 
-                ws = $websocket(wsUri);
+                ws = new WebSocket(wsUri);
 
-                ws.onMessage(function(event) {
-                    console.log('message: ', event);
-                    var res;
-                    try {
-                        res = JSON.parse(event.data);
-                    } catch(e) {
-                        res = {'message': event.data};
-                    }
-                    console.log(res);
-                });
-
-                ws.onError(function(event) {
-                    console.log('connection Error', event);
-                    deferred.reject();
-                });
-
-                ws.onClose(function(event) {
-                    console.log('connection closed', event);
-                });
-
-                ws.onOpen(function() {
-                    console.log('connection open');
+                ws.onopen = function () {
+                    console.log('open');
                     deferred.resolve();
-                });
+                };
+
+                ws.onmessage = function (event) {
+                    console.log(event.data);
+                    this.close();
+                };
+
+                ws.onerror = function () {
+                    console.log('error occurred!');
+                    deferred.reject();
+                };
+
+                ws.onclose = function (event) {
+                    console.log('close code=' + event.code);
+                };
 
                 return deferred.promise;
             },
             close: function(){
                 ws.close();
             }
-
         };
     });
 

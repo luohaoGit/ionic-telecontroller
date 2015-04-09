@@ -14,6 +14,12 @@
                  placeholder="输入IP" maxlength="15" required
                  ng-pattern="/^(\d+)\.(\d+)\.(\d+)\.(\d+)$/" />
         </label>
+        <label class="item item-input">
+          <span class="input-label">端口号:</span>
+          <input type="number" name="port" autocomplete="off" ng-model="loginData.port"
+                 placeholder="输入端口号" maxlength="5" required
+                 ng-pattern="/\d+/" />
+        </label>
         <label class="item">
           <button class="button button-block button-positive" type="submit" ng-disabled="loginForm.$invalid">连接</button>
         </label>
