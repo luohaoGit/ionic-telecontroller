@@ -2,7 +2,10 @@ angular.module('starter.controllers', ['hmTouchEvents'])
 
 .controller('AppCtrl', function($scope, $ionicModal, $timeout, $websocket, $ionicLoading, $ionicPopup) {
   // Form data for the login modal
-  $scope.loginData = {};
+  $scope.loginData = {
+    ip: localStorage.ip,
+    port: localStorage.port
+  };
 
   // Create the login modal that we will use later
   $ionicModal.fromTemplateUrl('templates/login.html', {
@@ -23,11 +26,13 @@ angular.module('starter.controllers', ['hmTouchEvents'])
 
   // Perform the login action when the user submits the login form
   $scope.doLogin = function() {
-    console.log('Doing login', $scope.loginData);
 
     $ionicLoading.show({
       template: '正在连接...'
     });
+
+    localStorage.ip = $scope.loginData.ip;
+    localStorage.port = $scope.loginData.port;
 
     $websocket.open($scope.loginData.ip, $scope.loginData.port).then(function(){
       $ionicLoading.hide();

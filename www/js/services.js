@@ -28,13 +28,13 @@ angular.module('starter.services', [])
                         sid = connectionId;
                         host = h;
                         port = p;
-                        deferred.resolve(connectionId);
                         console.log('worked! This is the connection ID: ', connectionId);
+                        deferred.resolve(connectionId);
                     },
 
                     function () {
-                        deferred.resolve();
                         console.log('failed!');
+                        deferred.reject();
                     },
                     h,
                     p
