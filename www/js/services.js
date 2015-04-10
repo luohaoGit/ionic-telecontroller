@@ -1,53 +1,64 @@
 angular.module('starter.services', [])
-    .factory('websocket', function ($websocket, $q) {
+    .factory('$websocket', function ($q) {
 
-        var ws;
+        var sid, host, port;
 
         return {
-            status: function() {
-                return ws.readyState;
-            },
             send: function(message) {
+                var data = 'This is the data i want to send!';
                 if (angular.isString(message)) {
-                    ws.send(message);
+                    data = message;
                 }else if (angular.isObject(message)) {
-                    ws.send(JSON.stringify(message));
+                    data = JSON.stringify(message);
                 }
+
+                window.tlantic.plugins.socket.send(
+                    function () {
+                        alert('worked!')
+                        console.log('worked!');
+                    },
+
+                    function () {
+                        alert('failed!')
+                        console.log('failed!');
+                    },
+                    host + ':' + port,
+                    data
+                );
             },
-            open: function(wsUri){
+            open: function(h, p){
                 var deferred = $q.defer();
 
-                ws = $websocket(wsUri);
+                window.tlantic.plugins.socket.connect(
+                    function (connectionId) {
+                        sid = connectionId;
+                        host = h;
+                        port = p;
+                        deferred.resolve(connectionId);
+                        console.log('worked! This is the connection ID: ', connectionId);
+                    },
 
-                ws.onMessage(function(event) {
-                    console.log('message: ', event);
-                    var res;
-                    try {
-                        res = JSON.parse(event.data);
-                    } catch(e) {
-                        res = {'message': event.data};
-                    }
-                    console.log(res);
-                });
-
-                ws.onError(function(event) {
-                    console.log('connection Error', event);
-                    deferred.reject();
-                });
-
-                ws.onClose(function(event) {
-                    console.log('connection closed', event);
-                });
-
-                ws.onOpen(function() {
-                    console.log('connection open');
-                    deferred.resolve();
-                });
+                    function () {
+                        deferred.resolve();
+                        console.log('failed!');
+                    },
+                    h,
+                    p
+                );
 
                 return deferred.promise;
             },
             close: function(){
-                ws.close();
+                window.tlantic.plugins.socket.disconnect(
+                    function () {
+                        console.log('worked!');
+                    },
+
+                    function () {
+                        console.log('failed!');
+                    },
+                    host + ':' + port
+                );
             }
 
         };

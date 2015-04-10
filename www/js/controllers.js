@@ -1,6 +1,6 @@
 angular.module('starter.controllers', ['hmTouchEvents'])
 
-.controller('AppCtrl', function($scope, $ionicModal, $timeout, websocket, $ionicLoading, $ionicPopup) {
+.controller('AppCtrl', function($scope, $ionicModal, $timeout, $websocket, $ionicLoading, $ionicPopup) {
   // Form data for the login modal
   $scope.loginData = {};
 
@@ -29,8 +29,7 @@ angular.module('starter.controllers', ['hmTouchEvents'])
       template: '正在连接...'
     });
 
-    var wsUri = 'ws://' + $scope.loginData.ip + ':' + $scope.loginData.port;
-    websocket.open(wsUri).then(function(){
+    $websocket.open($scope.loginData.ip, $scope.loginData.port).then(function(){
       $ionicLoading.hide();
       $scope.closeLogin();
     }, function(){
@@ -60,7 +59,7 @@ angular.module('starter.controllers', ['hmTouchEvents'])
 .controller('PlaylistCtrl', function($scope, $stateParams) {
 })
 
-.controller('MainCtrl', function($scope, $stateParams) {
+.controller('MainCtrl', function($scope, $stateParams, $websocket) {
   $scope.command = {};
   $scope.deltaX = 0;
   $scope.deltaY = 0;
@@ -100,6 +99,7 @@ angular.module('starter.controllers', ['hmTouchEvents'])
   };
 
   $scope.clickHandle = function(type) {
+    $websocket.send(type)
     if(type == 0){
       $scope.command.code = 3;
     }else if(type == 1){
