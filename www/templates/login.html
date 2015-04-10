@@ -16,7 +16,7 @@
         </label>
         <label class="item item-input">
           <span class="input-label">端口号:</span>
-          <input type="text" name="port" autocomplete="off" ng-model="loginData.port"
+          <input type="number" name="port" value="{{loginData.port}}" autocomplete="off" ng-model="loginData.port"
                  placeholder="输入端口号" maxlength="5" required
                  ng-pattern="/\d+/" />
         </label>
