@@ -1,6 +1,6 @@
 angular.module('starter.controllers', ['hmTouchEvents'])
 
-.controller('AppCtrl', function($scope, $ionicModal, $timeout, $websocket, $ionicLoading, $ionicPopup) {
+.controller('AppCtrl', function($scope, $ionicModal, $timeout, websocket, $ionicLoading, $ionicPopup) {
   // Form data for the login modal
   $scope.loginData = {};
 
@@ -30,7 +30,7 @@ angular.module('starter.controllers', ['hmTouchEvents'])
     });
 
     var wsUri = 'ws://' + $scope.loginData.ip + ':' + $scope.loginData.port;
-    $websocket.open(wsUri).then(function(){
+    websocket.open(wsUri).then(function(){
       $ionicLoading.hide();
       $scope.closeLogin();
     }, function(){
