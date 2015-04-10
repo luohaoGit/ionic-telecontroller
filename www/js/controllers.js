@@ -67,8 +67,8 @@ angular.module('starter.controllers', ['hmTouchEvents'])
   $scope.onHammer = function(event) {
     var type = event.type;
     if(type == 'pan') {
-      $scope.command.deltaX = event.deltaX - $scope.deltaX;
-      $scope.command.deltaY = event.deltaY - $scope.deltaY;
+      $scope.command.moveX = event.deltaX - $scope.deltaX;
+      $scope.command.moveY = event.deltaY - $scope.deltaY;
       $scope.command.code = 2;
       $scope.deltaX = event.deltaX;
       $scope.deltaY = event.deltaY;
@@ -83,27 +83,28 @@ angular.module('starter.controllers', ['hmTouchEvents'])
       $scope.showout = type + ":" + new Date().getTime();
     }else if(type == 'press'){
       $scope.command.code = 100;
-    }else if(type == 'panup'){
+    }else if(type == 'swipeup'){
       $scope.command.code = 17;
       $scope.showout = type + ":" + new Date().getTime();
-    }else if(type == 'pandown'){
+    }else if(type == 'swipedown'){
       $scope.command.code = 18;
       $scope.showout = type + ":" + new Date().getTime();
-    }else if(type == 'panleft'){
+    }else if(type == 'swipeleft'){
       $scope.command.code = 19;
       $scope.showout = type + ":" + new Date().getTime();
-    }else if(type == 'panright'){
+    }else if(type == 'swiperight'){
       $scope.command.code = 20;
       $scope.showout = type + ":" + new Date().getTime();
     }
+    $websocket.send(JSON.stringify($scope.command));
   };
 
   $scope.clickHandle = function(type) {
-    $websocket.send(type)
     if(type == 0){
       $scope.command.code = 3;
     }else if(type == 1){
       $scope.command.code = 101;
     }
+    $websocket.send(JSON.stringify($scope.command));
   }
 });

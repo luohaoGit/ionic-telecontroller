@@ -5,25 +5,19 @@ angular.module('starter.services', [])
 
         return {
             send: function(message) {
-                var data = 'This is the data i want to send!';
-                if (angular.isString(message)) {
-                    data = message;
-                }else if (angular.isObject(message)) {
-                    data = JSON.stringify(message);
-                }
+                if(!sid)
+                    return;
 
                 window.tlantic.plugins.socket.send(
                     function () {
-                        alert('worked!')
                         console.log('worked!');
                     },
 
                     function () {
-                        alert('failed!')
                         console.log('failed!');
                     },
                     host + ':' + port,
-                    data
+                    message
                 );
             },
             open: function(h, p){
@@ -49,6 +43,7 @@ angular.module('starter.services', [])
                 return deferred.promise;
             },
             close: function(){
+                sid = null;
                 window.tlantic.plugins.socket.disconnect(
                     function () {
                         console.log('worked!');

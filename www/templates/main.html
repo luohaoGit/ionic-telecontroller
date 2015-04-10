@@ -1,38 +1,34 @@
 <style type="text/css">
-  .target {
-    display: inline-block;
-    margin: auto;
-    text-align: center;
-    color: white;
-    background-color: #444;
-  }
+    .target {
+        display: inline-block;
+        margin: auto;
+        text-align: center;
+        color: white;
+        background-color: #444;
+        height: 300px;
+    }
 
-  .allbtn {
-    width: 100%;
-    float: left;
-  }
+    .leftbtn {
+        height: 100%;
+        width: 30%;
+        float: left;
+        text-align: right;
+    }
 
-  .wrapper {
-    float: left;
-    text-align:center;
-    margin: auto;
-  }
+    .wheel {
+        background-color: #444;
+        width: 40%;
+        float: left;
+        margin-left: 10px;
+        margin-right: 10px;
+        height: 180px;
+    }
 
-  .leftbtn {
-    float: left;
-  }
-
-  .midbtn {
-    float: left;
-  }
-
-  .rightbtn {
-    float: left;
-  }
-
-  .wheel {
-    background-color: #444;
-  }
+    .rightbtn {
+        height: 100%;
+        width: 30%;
+        float: left;
+    }
 </style>
 
 <ion-view view-title="主面板">
@@ -43,33 +39,25 @@
            hm-doubletap = "onHammer"
            hm-tap = "onHammer"
            hm-press = "onHammer">
-          <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-          <div>{{command.deltaX}}@{{command.deltaY}}@{{command.code}}@{{showout}}</div>
+          <div>{{command.moveX}}@{{command.moveY}}@{{command.code}}@{{showout}}</div>
       </div>
     </div>
-    <div class="allbtn">
-        <div class="wrapper">
-            <div class="leftbtn">
-                <button class="button button-large button-dark" ng-click="clickHandle(0)">
-                    左键
-                </button>
-            </div>
-            <div class="midbtn">
-                <div hm-panleft = "onHammer"
-                     hm-panright = "onHammer"
-                     hm-pandown = "onHammer"
-                     hm-panup = "onHammer"
-                     class="wheel">
-                    滚轮滚轮滚轮滚轮滚轮滚轮滚轮<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-                </div>
-            </div>
-            <div class="rightbtn">
-                <button class="button button-large button-dark" ng-click="clickHandle(1)">
-                    右键
-                </button>
-            </div>
+    <div class="button-bar">
+        <div class="leftbtn">
+            <button class="button button-large button-dark" ng-click="clickHandle(0)">
+                左键
+            </button>
+        </div>
+        <div class="wheel"
+             hm-swipeleft = "onHammer"
+             hm-swiperight = "onHammer"
+             hm-swipedown = "onHammer"
+             hm-swipeup = "onHammer"></div>
+        <div class="rightbtn">
+            <button class="button button-large button-dark" ng-click="clickHandle(1)">
+                右键
+            </button>
         </div>
     </div>
-
   </ion-content>
 </ion-view>
