@@ -4,7 +4,7 @@ angular.module('starter.controllers', ['hmTouchEvents'])
   // Form data for the login modal
   $scope.loginData = {
     ip: localStorage.ip,
-    port: localStorage.port
+    port: localStorage.port ? parseInt(localStorage.port) : 6666
   };
 
   // Create the login modal that we will use later
