@@ -65,51 +65,55 @@ angular.module('starter.controllers', ['hmTouchEvents'])
 })
 
 .controller('MainCtrl', function($scope, $stateParams, $websocket) {
+  var separator = "===!@#";
   $scope.command = {};
   $scope.deltaX = 0;
   $scope.deltaY = 0;
   $scope.showout = '';
   $scope.onHammer = function(event) {
     var type = event.type;
+    var data = [];
+    $scope.command = {};
+    $scope.showout = type;
     if(type == 'pan') {
+      $scope.command = {beginY:0, beginX:0};
       $scope.command.moveX = event.deltaX - $scope.deltaX;
       $scope.command.moveY = event.deltaY - $scope.deltaY;
-      $scope.command.code = 2;
       $scope.deltaX = event.deltaX;
       $scope.deltaY = event.deltaY;
       if(event.isFinal){
         $scope.deltaX = 0;
         $scope.deltaY = 0;
       }
+
+      data = data.concat(0, 2, 2); //0代表调用方法类型，2代表模拟键值指令
+      data.push(JSON.stringify($scope.command));
     }else if(type == 'tap'){
-      $scope.command.code = 3;
+      data = data.concat(1, 2, 3);
     }else if(type == 'doubletap'){
-      $scope.command.code = 4;
-      $scope.showout = type + ":" + new Date().getTime();
+      data = data.concat(1, 2, 4);
     }else if(type == 'press'){
-      $scope.command.code = 100;
+      data = data.concat(1, 2, 5);
     }else if(type == 'swipeup'){
-      $scope.command.code = 17;
-      $scope.showout = type + ":" + new Date().getTime();
+      data = data.concat(1, 2, 17);
     }else if(type == 'swipedown'){
-      $scope.command.code = 18;
-      $scope.showout = type + ":" + new Date().getTime();
+      data = data.concat(1, 2, 18);
     }else if(type == 'swipeleft'){
-      $scope.command.code = 19;
-      $scope.showout = type + ":" + new Date().getTime();
+      data = data.concat(1, 2, 19);
     }else if(type == 'swiperight'){
-      $scope.command.code = 20;
-      $scope.showout = type + ":" + new Date().getTime();
+      data = data.concat(1, 2, 20)
     }
-    $websocket.send(JSON.stringify($scope.command));
+
+    $websocket.send(data.join(separator));
   };
 
   $scope.clickHandle = function(type) {
+    var data = [];
     if(type == 0){
-      $scope.command.code = 3;
+      data = data.concat(1, 2, 3);
     }else if(type == 1){
-      $scope.command.code = 101;
+      data = data.concat(1, 2, 5);
     }
-    $websocket.send(JSON.stringify($scope.command));
+    $websocket.send(data.join(separator));
   }
 });
