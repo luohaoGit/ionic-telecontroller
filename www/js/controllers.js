@@ -91,7 +91,7 @@ angular.module('starter.controllers', ['hmTouchEvents'])
     }else if(type == 'tap'){
       data = data.concat(1, 2, 3);
     }else if(type == 'doubletap'){
-      data = data.concat(1, 2, 4);
+      data = data.concat(1, 2, 5);
     }else if(type == 'press'){
       data = data.concat(1, 2, 5);
     }else if(type == 'swipeup'){
@@ -112,7 +112,7 @@ angular.module('starter.controllers', ['hmTouchEvents'])
     if(type == 0){
       data = data.concat(1, 2, 3);
     }else if(type == 1){
-      data = data.concat(1, 2, 5);
+      data = data.concat(1, 2, 4);
     }
     $websocket.send(data.join(separator));
   }
