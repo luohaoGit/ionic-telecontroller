@@ -50,18 +50,10 @@ angular.module('starter.controllers', ['hmTouchEvents'])
   };
 })
 
-.controller('PlaylistsCtrl', function($scope) {
-  $scope.playlists = [
-    { title: 'Reggae', id: 1 },
-    { title: 'Chill', id: 2 },
-    { title: 'Dubstep', id: 3 },
-    { title: 'Indie', id: 4 },
-    { title: 'Rap', id: 5 },
-    { title: 'Cowbell', id: 6 }
-  ];
-})
-
-.controller('PlaylistCtrl', function($scope, $stateParams) {
+.controller('SettingsCtrl', function($scope) {
+  $scope.settings = {
+    sensitivity: localStorage.sensitivity ? parseInt(localStorage.sensitivity) : 50
+  }
 })
 
 .controller('MainCtrl', function($scope, $stateParams, $websocket) {
@@ -94,6 +86,7 @@ angular.module('starter.controllers', ['hmTouchEvents'])
       data = data.concat(1, 2, 5);
     }else if(type == 'press'){
       data = data.concat(1, 2, 5);
+      cordova.plugins.Keyboard.show();
     }else if(type == 'swipeup'){
       data = data.concat(1, 2, 17);
     }else if(type == 'swipedown'){

@@ -40,22 +40,12 @@ angular.module('starter', ['ionic', 'starter.services', 'starter.controllers'])
     }
   })
 
-  .state('app.playlists', {
-    url: "/playlists",
+  .state('app.settings', {
+    url: "/settings",
     views: {
       'menuContent': {
-        templateUrl: "templates/playlists.html",
-        controller: 'PlaylistsCtrl'
-      }
-    }
-  })
-
-  .state('app.single', {
-    url: "/playlists/:playlistId",
-    views: {
-      'menuContent': {
-        templateUrl: "templates/playlist.html",
-        controller: 'PlaylistCtrl'
+        templateUrl: "templates/settings.html",
+        controller: 'SettingsCtrl'
       }
     }
   });
