@@ -2,20 +2,14 @@
   <ion-content class="padding">
     <div class="list">
 
-      <li class="item item-toggle">
+      <ion-toggle toggle-class="toggle-positive" ng-model="settings.leftHandMode" ng-change="changeMode()">
         左手模式
-        <label class="toggle toggle-positive">
-          <input type="checkbox">
-          <div class="track">
-            <div class="handle"></div>
-          </div>
-        </label>
-      </li>
+      </ion-toggle>
 
       <div class="item range range-positive">
         鼠标灵敏度
         <i class="icon ion-ios7-sunny-outline"></i>
-        <input type="range" name="volume" min="1" max="100" value="{{settings.sensitivity}}">
+        <input type="range" name="volume" min="1" max="100" ng-model="settings.sensitivity">
         <i class="icon ion-ios7-sunny"></i>
       </div>
 

@@ -52,8 +52,18 @@ angular.module('starter.controllers', ['hmTouchEvents'])
 
 .controller('SettingsCtrl', function($scope) {
   $scope.settings = {
-    sensitivity: localStorage.sensitivity ? parseInt(localStorage.sensitivity) : 50
+    sensitivity: localStorage.sensitivity ? parseInt(localStorage.sensitivity) : 50,
+    leftHandMode: localStorage.leftHandMode == 'true' ? true : false
   }
+
+  $scope.changeMode = function(){
+    localStorage.leftHandMode = $scope.settings.leftHandMode;
+  }
+
+  $scope.$watch('settings.sensitivity', function(newVal){
+    localStorage.sensitivity = newVal;
+  });
+
 })
 
 .controller('MainCtrl', function($scope, $stateParams, $websocket) {
