@@ -45,7 +45,8 @@
     <div class="button-bar">
         <div class="leftbtn">
             <button class="button button-large button-dark" ng-click="clickHandle(0)">
-                <span ng-bind="leftBtnValue"></span>
+                <div ng-if="settings.leftHandMode">右键</div>
+                <div ng-if="!settings.leftHandMode">左键</div>
             </button>
         </div>
         <div class="wheel"
@@ -55,7 +56,8 @@
              hm-swipeup = "onHammer"></div>
         <div class="rightbtn">
             <button class="button button-large button-dark" ng-click="clickHandle(1)">
-                <span ng-bind="rightBtnValue"></span>
+                <div ng-if="settings.leftHandMode">左键</div>
+                <div ng-if="!settings.leftHandMode">右键</div>
             </button>
         </div>
     </div>

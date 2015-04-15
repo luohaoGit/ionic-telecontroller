@@ -65,8 +65,6 @@ angular.module('starter.controllers', ['hmTouchEvents'])
   $scope.command = {};
   $scope.deltaX = 0;
   $scope.deltaY = 0;
-  $scope.leftBtnValue = "左键";
-  $scope.rightBtnValue = "右键";
   $scope.showout = '';
   $scope.onHammer = function(event) {
     var type = event.type;
@@ -102,7 +100,7 @@ angular.module('starter.controllers', ['hmTouchEvents'])
     }else if(type == 'swiperight'){
       data = data.concat(1, 2, 20);
     }
-console.log(data)
+
     $websocket.send(data.join(separator));
   };
 
@@ -124,13 +122,4 @@ console.log(data)
     $websocket.send(data.join(separator));
   }
 
-  $scope.$watch('settings.leftHandMode', function(newVal){
-    if(newVal){
-      $scope.leftBtnValue = "右键";
-      $scope.rightBtnValue = "左键";
-    }else{
-      $scope.leftBtnValue = "左键";
-      $scope.rightBtnValue = "右键";
-    }
-  });
 });
