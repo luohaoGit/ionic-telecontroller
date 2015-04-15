@@ -50,27 +50,23 @@ angular.module('starter.controllers', ['hmTouchEvents'])
   };
 })
 
-.controller('SettingsCtrl', function($scope) {
-  $scope.settings = {
-    sensitivity: localStorage.sensitivity ? parseInt(localStorage.sensitivity) : 50,
-    leftHandMode: localStorage.leftHandMode == 'true' ? true : false
-  }
-
+.controller('SettingsCtrl', function($scope, $rootScope) {
   $scope.changeMode = function(){
-    localStorage.leftHandMode = $scope.settings.leftHandMode;
+    localStorage.leftHandMode = $rootScope.settings.leftHandMode;
   }
 
   $scope.$watch('settings.sensitivity', function(newVal){
     localStorage.sensitivity = newVal;
   });
-
 })
 
-.controller('MainCtrl', function($scope, $stateParams, $websocket) {
+.controller('MainCtrl', function($scope, $rootScope, $stateParams, $websocket) {
   var separator = "===!@#";
   $scope.command = {};
   $scope.deltaX = 0;
   $scope.deltaY = 0;
+  $scope.leftBtnValue = "左键";
+  $scope.rightBtnValue = "右键";
   $scope.showout = '';
   $scope.onHammer = function(event) {
     var type = event.type;
@@ -79,8 +75,8 @@ angular.module('starter.controllers', ['hmTouchEvents'])
     $scope.showout = type;
     if(type == 'pan') {
       $scope.command = {beginY:0, beginX:0};
-      $scope.command.moveX = event.deltaX - $scope.deltaX;
-      $scope.command.moveY = event.deltaY - $scope.deltaY;
+      $scope.command.moveX = (event.deltaX - $scope.deltaX) * $rootScope.settings.sensitivity;
+      $scope.command.moveY = (event.deltaY - $scope.deltaY) * $rootScope.settings.sensitivity;
       $scope.deltaX = event.deltaX;
       $scope.deltaY = event.deltaY;
       if(event.isFinal){
@@ -104,19 +100,37 @@ angular.module('starter.controllers', ['hmTouchEvents'])
     }else if(type == 'swipeleft'){
       data = data.concat(1, 2, 19);
     }else if(type == 'swiperight'){
-      data = data.concat(1, 2, 20)
+      data = data.concat(1, 2, 20);
     }
-
+console.log(data)
     $websocket.send(data.join(separator));
   };
 
   $scope.clickHandle = function(type) {
     var data = [];
+    var leftCmd = 3, rightCmd = 4;
+
+    if($rootScope.settings.leftHandMode){
+      leftCmd = leftCmd + rightCmd;
+      rightCmd = leftCmd - rightCmd;
+      leftCmd = leftCmd - rightCmd;
+    }
+
     if(type == 0){
-      data = data.concat(1, 2, 3);
+      data = data.concat(1, 2, leftCmd);
     }else if(type == 1){
-      data = data.concat(1, 2, 4);
+      data = data.concat(1, 2, rightCmd);
     }
     $websocket.send(data.join(separator));
   }
+
+  $scope.$watch('settings.leftHandMode', function(newVal){
+    if(newVal){
+      $scope.leftBtnValue = "右键";
+      $scope.rightBtnValue = "左键";
+    }else{
+      $scope.leftBtnValue = "左键";
+      $scope.rightBtnValue = "右键";
+    }
+  });
 });

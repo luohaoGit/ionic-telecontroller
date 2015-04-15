@@ -6,8 +6,13 @@
 // 'starter.controllers' is found in controllers.js
 angular.module('starter', ['ionic', 'starter.services', 'starter.controllers'])
 
-.run(function($ionicPlatform) {
+.run(function($ionicPlatform, $rootScope) {
   $ionicPlatform.ready(function() {
+    $rootScope.settings = {
+      sensitivity: localStorage.sensitivity ? parseInt(localStorage.sensitivity) : 50,
+      leftHandMode: localStorage.leftHandMode == 'true' ? true : false
+    }
+
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
     if (window.cordova && window.cordova.plugins.Keyboard) {
