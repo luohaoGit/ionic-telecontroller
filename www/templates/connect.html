@@ -6,22 +6,22 @@
     </div>
   </ion-header-bar>
   <ion-content>
-    <form name="loginForm" ng-submit="doLogin()">
+    <form name="connectForm" ng-submit="connect()">
       <div class="list">
         <label class="item item-input">
           <span class="input-label">IP地址:</span>
-          <input type="text" name="ip" autocomplete="off" ng-model="loginData.ip"
+          <input type="text" name="ip" autocomplete="off" ng-model="connectData.ip"
                  placeholder="输入IP" maxlength="15" required
                  ng-pattern="/^(\d+)\.(\d+)\.(\d+)\.(\d+)$/" />
         </label>
         <label class="item item-input">
           <span class="input-label">端口号:</span>
-          <input type="number" name="port" autocomplete="off" ng-model="loginData.port"
+          <input type="number" name="port" autocomplete="off" ng-model="connectData.port"
                  placeholder="输入端口号" maxlength="5" required
                  ng-pattern="/\d+/" />
         </label>
         <label class="item">
-          <button class="button button-block button-positive" type="submit" ng-disabled="loginForm.$invalid">连接</button>
+          <button class="button button-block button-positive" type="submit" ng-disabled="connectForm.$invalid">连接</button>
         </label>
       </div>
     </form>

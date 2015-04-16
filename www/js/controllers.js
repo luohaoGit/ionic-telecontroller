@@ -1,8 +1,33 @@
 angular.module('starter.controllers', ['hmTouchEvents'])
 
+.controller('LoginCtrl', function($scope, LoginService, $state, $ionicPopup, $rootScope) {
+  $scope.loginData = {
+    username: localStorage.username,
+    password: localStorage.password
+  }
+
+  if(localStorage.userdata){//离线登录
+    $state.go('app.main');
+  }
+
+  $scope.login = function(){
+    LoginService.login($scope.loginData.username, $scope.loginData.password).success(function (data) {
+      localStorage.username = $scope.loginData.username;
+      localStorage.password = $scope.loginData.password;
+      localStorage.userdata = data;
+      $state.go('app.main');
+    }).error(function (data) {
+      var alertPopup = $ionicPopup.alert({
+        title: '登录失败',
+        template: '请检查您的用户名和密码'
+      });
+    });
+  }
+})
+
 .controller('AppCtrl', function($scope, $ionicModal, $timeout, $websocket, $ionicLoading, $ionicPopup) {
   // Form data for the login modal
-  $scope.loginData = {
+  $scope.connectData = {
     ip: localStorage.ip,
     port: localStorage.port ? parseInt(localStorage.port) : 6666
   };
@@ -25,16 +50,16 @@ angular.module('starter.controllers', ['hmTouchEvents'])
   };
 
   // Perform the login action when the user submits the login form
-  $scope.doLogin = function() {
+  $scope.connect = function() {
 
     $ionicLoading.show({
       template: '正在连接...'
     });
 
-    localStorage.ip = $scope.loginData.ip;
-    localStorage.port = $scope.loginData.port;
+    localStorage.ip = $scope.connectData.ip;
+    localStorage.port = $scope.connectData.port;
 
-    $websocket.open($scope.loginData.ip, $scope.loginData.port).then(function(){
+    $websocket.open($scope.connectData.ip, $scope.connectData.port).then(function(){
       $ionicLoading.hide();
       $scope.closeLogin();
     }, function(){

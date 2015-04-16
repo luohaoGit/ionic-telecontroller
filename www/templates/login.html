@@ -1,0 +1,17 @@
+<ion-view view-title="登录" name="login-view">
+  <ion-content class="padding">
+      <form name="loginForm" ng-submit="login()">
+          <div class="list list-inset">
+              <label class="item item-input">
+                  <input type="text" required="false" maxlength="20" minlength="2"
+                         autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+                         placeholder="用户名" ng-model="loginData.username">
+              </label>
+              <label class="item item-input">
+                  <input type="password" required="false" placeholder="密码" minlength="6" maxlength="20" ng-model="loginData.password">
+              </label>
+          </div>
+          <button type="submit" class="button button-block button-positive" ng-disabled="loginForm.$invalid">登录</button>
+      </form>
+  </ion-content>
+</ion-view>
