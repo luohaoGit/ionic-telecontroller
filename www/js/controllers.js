@@ -75,7 +75,7 @@ angular.module('starter.controllers', ['hmTouchEvents'])
   };
 })
 
-.controller('SettingsCtrl', function($scope, $rootScope) {
+.controller('SettingsCtrl', function($scope, $rootScope, $state) {
   $scope.changeMode = function(){
     localStorage.leftHandMode = $rootScope.settings.leftHandMode;
   }
@@ -83,6 +83,16 @@ angular.module('starter.controllers', ['hmTouchEvents'])
   $scope.$watch('settings.sensitivity', function(newVal){
     localStorage.sensitivity = newVal;
   });
+
+  $scope.logout = function(){
+    localStorage.removeItem("userdata");
+    localStorage.removeItem("password");
+    $state.go('login');
+  }
+
+  $scope.exit = function(){
+    ionic.Platform.exitApp();
+  }
 })
 
 .controller('MainCtrl', function($scope, $rootScope, $stateParams, $websocket) {

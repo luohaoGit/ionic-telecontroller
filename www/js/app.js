@@ -6,11 +6,32 @@
 // 'starter.controllers' is found in controllers.js
 angular.module('starter', ['ionic', 'starter.services', 'starter.controllers', 'starter.directives'])
 
-.run(function($ionicPlatform, $rootScope) {
+.run(function($ionicPlatform, $rootScope, $location, $ionicHistory) {
   $rootScope.settings = {
     sensitivity: localStorage.sensitivity ? parseInt(localStorage.sensitivity) : 50,
     leftHandMode: localStorage.leftHandMode == 'true' ? true : false
   }
+
+  $ionicPlatform.registerBackButtonAction(function(e){
+    if ($location.path() == '/app/main' || $location.path() == '/app/settings') {
+      if ($rootScope.backButtonPressedOnceToExit) {
+        ionic.Platform.exitApp();
+        return;
+      }
+      $rootScope.backButtonPressedOnceToExit = true;
+      window.plugins.toast.showShortCenter(
+          "再按一次退出程序",function(a){},function(b){}
+      );
+      setTimeout(function(){
+        $rootScope.backButtonPressedOnceToExit = false;
+      },2000);
+    }else if($ionicHistory.backView()){
+      $ionicHistory.goBack();
+    }
+    e.preventDefault();
+    return false;
+  },101);
+
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
