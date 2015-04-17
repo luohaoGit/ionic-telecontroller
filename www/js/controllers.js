@@ -14,7 +14,7 @@ angular.module('starter.controllers', ['hmTouchEvents'])
     LoginService.login($scope.loginData.username, $scope.loginData.password).success(function (data) {
       localStorage.username = $scope.loginData.username;
       localStorage.password = $scope.loginData.password;
-      if(angular.isObject){
+      if(angular.isObject(data)){
         localStorage.token = JSON.stringify(data.retMsg);
         localStorage.userdata = JSON.stringify(data.retObj[0]);
       }
@@ -35,9 +35,8 @@ angular.module('starter.controllers', ['hmTouchEvents'])
     port: localStorage.port ? parseInt(localStorage.port) : 6666
   };
 
-  $scope.userData = {
-    defaultAvatar: defaultAvatar
-  }
+  $scope.defaultAvatar = defaultAvatar;
+  $scope.userData = localStorage.userdata ? JSON.parse(localStorage.userdata) : {};
 
   // Create the login modal that we will use later
   $ionicModal.fromTemplateUrl('templates/connect.html', {
