@@ -1,15 +1,33 @@
 angular.module('starter.services', [])
-    .service('LoginService', function($q) {
+    .service('LoginService', function($q, $http) {
         return {
             login: function(name, pw) {
+                var separator = "===!@#";
                 var deferred = $q.defer();
                 var promise = deferred.promise;
 
-                if (name == 'user' && pw == '123456') {
-                    deferred.resolve('Welcome ' + name + '!');
-                } else {
-                    deferred.reject('Wrong credentials.');
-                }
+                var loginUrl = "http://comm.zxyq.com.cn:7080/JxlltTeaservice_comm.ashx";
+                var reqContent = "?requestmethod_opera=fun_user_token_login&Usertype=1&Source=Android&Logintype=0";
+                var username = "&Userid=";
+                var pwd = "&Userpwd=";
+
+                window.tlantic.plugins.socket.des(name + separator + pw, function(res){
+                    var arr = res.split(separator);
+                    username += arr[0];
+                    pwd += arr[1];
+                    //3023002==741506
+                    $http.post(loginUrl + reqContent + username + pwd)
+                        .success(function(res){
+                            if(res.retCode == '0'){//登录成功
+                                deferred.resolve(res);
+                            }else{
+                                deferred.reject();
+                            }
+                        }).error(function(data) {
+                            deferred.reject();
+                        });
+                }, function(){});
+
                 promise.success = function(fn) {
                     promise.then(fn);
                     return promise;

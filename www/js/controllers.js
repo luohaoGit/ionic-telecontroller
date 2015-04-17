@@ -14,7 +14,10 @@ angular.module('starter.controllers', ['hmTouchEvents'])
     LoginService.login($scope.loginData.username, $scope.loginData.password).success(function (data) {
       localStorage.username = $scope.loginData.username;
       localStorage.password = $scope.loginData.password;
-      localStorage.userdata = data;
+      if(angular.isObject){
+        localStorage.token = JSON.stringify(data.retMsg);
+        localStorage.userdata = JSON.stringify(data.retObj[0]);
+      }
       $state.go('app.main');
     }).error(function (data) {
       var alertPopup = $ionicPopup.alert({
@@ -25,12 +28,16 @@ angular.module('starter.controllers', ['hmTouchEvents'])
   }
 })
 
-.controller('AppCtrl', function($scope, $ionicModal, $timeout, $websocket, $ionicLoading, $ionicPopup) {
+.controller('AppCtrl', function($scope, $ionicModal, $timeout, $websocket, $ionicLoading, $ionicPopup, defaultAvatar) {
   // Form data for the login modal
   $scope.connectData = {
     ip: localStorage.ip,
     port: localStorage.port ? parseInt(localStorage.port) : 6666
   };
+
+  $scope.userData = {
+    defaultAvatar: defaultAvatar
+  }
 
   // Create the login modal that we will use later
   $ionicModal.fromTemplateUrl('templates/connect.html', {
