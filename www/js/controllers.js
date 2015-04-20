@@ -1,6 +1,6 @@
 angular.module('starter.controllers', ['hmTouchEvents'])
 
-.controller('LoginCtrl', function($scope, LoginService, $state, $ionicPopup, $rootScope) {
+.controller('LoginCtrl', function($scope, LoginService, $state, $ionicPopup, $ionicLoading, $rootScope) {
   $scope.loginData = {
     username: localStorage.username,
     password: localStorage.password
@@ -11,6 +11,10 @@ angular.module('starter.controllers', ['hmTouchEvents'])
   }
 
   $scope.login = function(){
+    $ionicLoading.show({
+      template: '正在登录...'
+    });
+
     LoginService.login($scope.loginData.username, $scope.loginData.password).success(function (data) {
       localStorage.username = $scope.loginData.username;
       localStorage.password = $scope.loginData.password;
@@ -18,8 +22,10 @@ angular.module('starter.controllers', ['hmTouchEvents'])
         localStorage.token = JSON.stringify(data.retMsg);
         localStorage.userdata = JSON.stringify(data.retObj[0]);
       }
+      $ionicLoading.hide();
       $state.go('app.main');
     }).error(function (data) {
+      $ionicLoading.hide();
       var alertPopup = $ionicPopup.alert({
         title: '登录失败',
         template: '请检查您的用户名和密码'
