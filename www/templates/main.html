@@ -33,13 +33,18 @@
 
 <ion-view view-title="主面板">
   <ion-content scroll="false">
+    <label class="item item-input">
+      <input type="text" placeholder="请输入内容。。。" ng-model="otherData.contentToSend" />
+    </label>
+    <button class="button button-small button-positive" ng-click="clickHandle(2)">
+      确定
+    </button>
     <div class="row responsive-sm">
       <div class="col col-50 target"
            hm-pan = "onHammer"
            hm-doubletap = "onHammer"
            hm-tap = "onHammer"
            hm-press = "onHammer">
-          <div>{{command.moveX}}@{{command.moveY}}@{{showout}}</div>
       </div>
     </div>
     <div class="button-bar">

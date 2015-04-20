@@ -110,14 +110,13 @@ angular.module('starter.controllers', ['hmTouchEvents'])
 .controller('MainCtrl', function($scope, $rootScope, $stateParams, $websocket) {
   var separator = "===!@#";
   $scope.command = {};
+  $scope.otherData = {};
   $scope.deltaX = 0;
   $scope.deltaY = 0;
-  $scope.showout = '';
   $scope.onHammer = function(event) {
     var type = event.type;
     var data = [];
     $scope.command = {};
-    $scope.showout = type;
     if(type == 'pan') {
       $scope.command = {beginY:0, beginX:0};
       $scope.command.moveX = (event.deltaX - $scope.deltaX) * $rootScope.settings.sensitivity;
@@ -128,7 +127,6 @@ angular.module('starter.controllers', ['hmTouchEvents'])
         $scope.deltaX = 0;
         $scope.deltaY = 0;
       }
-
       data = data.concat(0, 2, 2); //0代表调用方法类型，2代表模拟键值指令
       data.push(JSON.stringify($scope.command));
     }else if(type == 'tap'){
@@ -137,7 +135,7 @@ angular.module('starter.controllers', ['hmTouchEvents'])
       data = data.concat(1, 2, 5);
     }else if(type == 'press'){
       data = data.concat(1, 2, 5);
-      cordova.plugins.Keyboard.show();
+      //cordova.plugins.Keyboard.show();
     }else if(type == 'swipeup'){
       data = data.concat(1, 2, 17);
     }else if(type == 'swipedown'){
@@ -154,7 +152,6 @@ angular.module('starter.controllers', ['hmTouchEvents'])
   $scope.clickHandle = function(type) {
     var data = [];
     var leftCmd = 3, rightCmd = 4;
-
     if($rootScope.settings.leftHandMode){
       leftCmd = leftCmd + rightCmd;
       rightCmd = leftCmd - rightCmd;
@@ -165,6 +162,9 @@ angular.module('starter.controllers', ['hmTouchEvents'])
       data = data.concat(1, 2, leftCmd);
     }else if(type == 1){
       data = data.concat(1, 2, rightCmd);
+    }else if(type == 2){
+      console.log($scope.otherData.contentToSend)
+      $scope.otherData.contentToSend = '';
     }
     $websocket.send(data.join(separator));
   }
