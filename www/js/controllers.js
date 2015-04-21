@@ -34,7 +34,7 @@ angular.module('starter.controllers', ['hmTouchEvents'])
   }
 })
 
-.controller('AppCtrl', function($scope, $ionicModal, $timeout, $websocket, $ionicLoading, $ionicPopup, defaultAvatar) {
+.controller('AppCtrl', function($scope, $ionicModal, $timeout, $websocket, $ionicLoading, $ionicPopup, defaultAvatar, $ionicPopover) {
   // Form data for the login modal
   $scope.connectData = {
     ip: localStorage.ip,
@@ -85,6 +85,20 @@ angular.module('starter.controllers', ['hmTouchEvents'])
       });
     });
   };
+
+  $ionicPopover.fromTemplateUrl('templates/popover.html', {
+    scope: $scope
+  }).then(function(popover) {
+    $scope.popover = popover;
+  });
+
+  $scope.show = function($event) {
+    $scope.popover.show($event);
+  }
+
+  $scope.$on('$destroy', function() {
+    $scope.popover.remove();
+  });
 })
 
 .controller('SettingsCtrl', function($scope, $rootScope, $state) {
@@ -107,7 +121,7 @@ angular.module('starter.controllers', ['hmTouchEvents'])
   }
 })
 
-.controller('MainCtrl', function($scope, $rootScope, $stateParams, $websocket) {
+.controller('MainCtrl', function($scope, $rootScope, $stateParams, $websocket, $ionicPopover) {
   var separator = "===!@#";
   $scope.command = {};
   $scope.otherData = {};
@@ -116,7 +130,6 @@ angular.module('starter.controllers', ['hmTouchEvents'])
   $scope.onHammer = function(event) {
     var type = event.type;
     var data = [];
-    $scope.command = {};
     if(type == 'pan') {
       $scope.command = {beginY:0, beginX:0};
       $scope.command.moveX = (event.deltaX - $scope.deltaX) * $rootScope.settings.sensitivity;
@@ -168,5 +181,4 @@ angular.module('starter.controllers', ['hmTouchEvents'])
     }
     $websocket.send(data.join(separator));
   }
-
 });

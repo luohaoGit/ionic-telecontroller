@@ -6,7 +6,7 @@
 // 'starter.controllers' is found in controllers.js
 angular.module('starter', ['ionic', 'starter.services', 'starter.controllers', 'starter.directives'])
 
-.run(function($ionicPlatform, $rootScope, $location, $ionicHistory) {
+.run(function($ionicPlatform, $rootScope, $location, $ionicHistory, $websocket) {
   if(typeof(datagram) != 'undefined') {
     var PORT = 8003;
     var udp = datagram.createSocket("udp4");
@@ -24,6 +24,7 @@ angular.module('starter', ['ionic', 'starter.services', 'starter.controllers', '
   $ionicPlatform.registerBackButtonAction(function(e){
     if ($location.path() == '/app/main' || $location.path() == '/app/settings' || $location.path() == '/login') {
       if ($rootScope.backButtonPressedOnceToExit) {
+        $websocket.close();
         ionic.Platform.exitApp();
         return;
       }
