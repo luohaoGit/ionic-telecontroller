@@ -30,40 +30,19 @@
         float: left;
     }
 
-    .bar-footer {
-        overflow: visible !important;
+    .toolbar {
+        height: 200px;
+        background:#000;
+        position: absolute;
+        bottom: 0px;
     }
 
-    .bar-footer textarea {
-        resize: none;
-        height: 25px;
+    .toolbar-btn {
+        margin: auto;
     }
 
-    /* fixes an ios bug bear */
-    button.ion-android-send {
-        padding-top: 2px;
-    }
-
-    /* add this to keep your footer buttons down
-    at the bottom as the textarea resizes */
-    .footer-btn-wrap {
+    .toolbar-lastbtn {
         position: relative;
-        height: 100%;
-        width: 50px;
-        top: 7px;
-    }
-
-    .footer-btn {
-        position: absolute !important;
-        bottom: 0;
-    }
-
-    .bar.item-input-inset .item-input-wrapper input {
-        width: 100% !important;
-    }
-
-    input, textarea, .item-input, .item-input-wrapper {
-        background-color: #f4f4f4 !important;
     }
 </style>
 
@@ -96,15 +75,23 @@
             </button>
         </div>
     </div>
-    <ion-footer-bar class="bar-stable item-input-inset message-footer" keyboard-attach>
-      <label class="item-input-wrapper">
-          <textarea ng-model="otherData.contentToSend" value="" placeholder="输入内容..."></textarea>
-      </label>
-      <div class="footer-btn-wrap">
-          <button class="button button-icon icon ion-android-send footer-btn" ng-click="clickHandle(2)"
-                  ng-disabled="!otherData.contentToSend || otherData.contentToSend === ''">
-          </button>
-      </div>
+
+    <ion-footer-bar class="bar-dark" keyboard-attach tool-attach>
+        <button class="button button-dark toolbar-btn" ng-click="showToolbar()">1</button>
+        <button class="button button-dark toolbar-btn" ng-click="showToolbar()">2</button>
+        <button class="button button-dark toolbar-btn" ng-click="showToolbar()">3</button>
+        <button class="button button-dark toolbar-btn" ng-click="showToolbar()">4</button>
+        <button class="button button-dark toolbar-btn" ng-click="showToolbar()">5</button>
+        <button class="button button-dark toolbar-btn toolbar-lastbtn" ng-click="showToolbar()">6</button>
     </ion-footer-bar>
-  </ion-content>
+    <div class="row toolbar" ng-show="toolbarShowed">
+        <div class="p1">
+            <div class="col">.col</div>
+            <div class="col">.col</div>
+            <div class="col">.col</div>
+            <div class="col">.col</div>
+            <div class="col">.col</div>
+        </div>
+    </div>
+</ion-content>
 </ion-view>

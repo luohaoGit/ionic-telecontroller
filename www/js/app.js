@@ -21,6 +21,8 @@ angular.module('starter', ['ionic', 'starter.services', 'starter.controllers', '
     leftHandMode: localStorage.leftHandMode == 'true' ? true : false
   }
 
+  $rootScope.isEdit = false;
+
   $ionicPlatform.registerBackButtonAction(function(e){
     if ($location.path() == '/app/main' || $location.path() == '/app/settings' || $location.path() == '/login') {
       if ($rootScope.backButtonPressedOnceToExit) {

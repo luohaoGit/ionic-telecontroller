@@ -44,7 +44,6 @@ angular.module('starter.controllers', ['hmTouchEvents'])
   $scope.defaultAvatar = defaultAvatar;
   $scope.userData = localStorage.userdata ? JSON.parse(localStorage.userdata) : {};
 
-  // Create the login modal that we will use later
   $ionicModal.fromTemplateUrl('templates/connect.html', {
     scope: $scope
   }).then(function(modal) {
@@ -86,19 +85,20 @@ angular.module('starter.controllers', ['hmTouchEvents'])
     });
   };
 
-  $ionicPopover.fromTemplateUrl('templates/popover.html', {
+/*  $ionicPopover.fromTemplateUrl('templates/popover.html', {
     scope: $scope
   }).then(function(popover) {
     $scope.popover = popover;
   });
 
   $scope.show = function($event) {
+    $websocket.close();
     $scope.popover.show($event);
   }
 
   $scope.$on('$destroy', function() {
-    $scope.popover.remove();
-  });
+    //$scope.popover.remove();
+  });*/
 })
 
 .controller('SettingsCtrl', function($scope, $rootScope, $state) {
@@ -127,6 +127,23 @@ angular.module('starter.controllers', ['hmTouchEvents'])
   $scope.otherData = {};
   $scope.deltaX = 0;
   $scope.deltaY = 0;
+  $scope.toolbarShowed = false;
+
+  $scope.triggerKeyboard = function(){
+    $rootScope.isEdit = !$rootScope.isEdit;
+  }
+
+  $scope.showToolbar = function(){
+    if($scope.toolbarShowed){
+      ionic.trigger('toolbarhide');
+    }else{
+      ionic.trigger('toolbarshow', {
+        toolbarHeight: 172
+      });
+    }
+    $scope.toolbarShowed = !$scope.toolbarShowed;
+  }
+
   $scope.onHammer = function(event) {
     var type = event.type;
     var data = [];
