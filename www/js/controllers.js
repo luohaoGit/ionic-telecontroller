@@ -128,20 +128,39 @@ angular.module('starter.controllers', ['hmTouchEvents'])
   $scope.deltaX = 0;
   $scope.deltaY = 0;
   $scope.toolbarShowed = false;
+  $scope.keyboardShowed = false;
+  $scope.buttonTxt = "";
 
-  $scope.triggerKeyboard = function(){
-    $rootScope.isEdit = !$rootScope.isEdit;
-  }
-
-  $scope.showToolbar = function(){
-    if($scope.toolbarShowed){
-      ionic.trigger('toolbarhide');
-    }else{
-      ionic.trigger('toolbarshow', {
-        toolbarHeight: 172
-      });
+  $scope.showToolbar = function(index){
+    if(index == 0){
+      $scope.buttonTxt = 3;
+      $scope.toolbarShowed = !$scope.toolbarShowed;
+    }else if(index == 1){
+      $scope.toolbarShowed = false;
+    }else if(index == 2){
+      $scope.buttonTxt = index;
+    }else if(index == 3){
+      $scope.buttonTxt = index;
+    }else if(index == 4){
+      $scope.buttonTxt = index;
+    }else if(index == 5){
+      $scope.buttonTxt = index;
     }
-    $scope.toolbarShowed = !$scope.toolbarShowed;
+
+    if(index == 1){
+      if($scope.keyboardShowed){
+        $scope.keyboardShowed = false;
+        cordova.plugins.Keyboard.close();
+      }else{
+        $scope.keyboardShowed = true;
+        cordova.plugins.Keyboard.show();
+      }
+    }else{
+      if($scope.keyboardShowed) {
+        $scope.keyboardShowed = false;
+        cordova.plugins.Keyboard.close();
+      }
+    }
   }
 
   $scope.onHammer = function(event) {

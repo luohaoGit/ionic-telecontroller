@@ -5,29 +5,6 @@
         text-align: center;
         color: white;
         background-color: #444;
-        height: 300px;
-    }
-
-    .leftbtn {
-        height: 100%;
-        width: 30%;
-        float: left;
-        text-align: right;
-    }
-
-    .wheel {
-        background-color: #444;
-        width: 40%;
-        float: left;
-        margin-left: 10px;
-        margin-right: 10px;
-        height: 180px;
-    }
-
-    .rightbtn {
-        height: 100%;
-        width: 30%;
-        float: left;
     }
 
     .toolbar {
@@ -38,30 +15,104 @@
     }
 
     .toolbar-btn {
+        background-color: #444;
+        color: #fff;
         margin: auto;
+        border-radius: 2px;
+
+        z-index: 1;
+        padding: 0 8px;
+        min-width: initial;
+        min-height: 31px;
+        font-weight: 400;
+        font-size: 13px;
+        line-height: 32px;
     }
 
-    .toolbar-lastbtn {
-        position: relative;
+    .bar-dark button {
+        width: 1000px;
+        border-left:0px;
+        border-right: 1px solid #fff;
+        border-bottom: 0px;
+        border-top: 0px;
+    }
+
+    .bar-dark button:last-child {
+        border-left:0;
+        border-right: 0;
+        border-bottom: 0;
+        border-top: 0;
+    }
+
+    .toolbar-btn.active,
+    .toolbar-btn.activated {
+        background-color: #000;
+        background-color: #262626;
+        box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .css_btn_class {
+        background-color: #444;
+        color: #fff;
+        margin: auto;
+        border-radius: 7px;
+        width: 100px;
+        height: 100px;
+    }
+
+    .click-bar {
+        position: absolute;
+        width: 100%;
+        height: 200px;
+        background: #555555;
+        border:1px solid #f7f7f7;
+    }
+
+    .click-bar-up {
+        bottom: 216px;
+    }
+    .click-bar-down {
+        bottom: 44px;
+    }
+
+    .foot-bar-up {
+        bottom: 172px;
+    }
+    .foot-bar-down {
+        bottom: 0px;
+    }
+
+    .click-bar div{
+        float: left;
+        height: 100%;
+    }
+
+    .leftbtn {
+        width: 40%;
+        background: #888888;
+    }
+
+    .rightbtn {
+        width: 40%;
+        background: #888888;
+    }
+
+    .wheel {
+        width: 20%;
+        background: #007aff;
     }
 </style>
 
 <ion-view view-title="主面板">
-  <ion-content scroll="false">
-    <div class="row responsive-sm">
-      <div class="col col-50 target"
-           hm-pan = "onHammer"
-           hm-doubletap = "onHammer"
-           hm-tap = "onHammer"
-           hm-press = "onHammer">
-      </div>
-    </div>
-    <div class="button-bar">
+  <ion-content scroll="false" class="target"
+               hm-pan = "onHammer"
+               hm-doubletap = "onHammer"
+               hm-tap = "onHammer"
+               hm-press = "onHammer">
+
+    <div class="click-bar" ng-class="{true: 'click-bar-up', false: 'click-bar-down'}[toolbarShowed]">
         <div class="leftbtn">
-            <button class="button button-large button-dark" ng-click="clickHandle(0)">
-                <div ng-if="settings.leftHandMode">右键</div>
-                <div ng-if="!settings.leftHandMode">左键</div>
-            </button>
+
         </div>
         <div class="wheel"
              hm-swipeleft = "onHammer"
@@ -69,29 +120,25 @@
              hm-swipedown = "onHammer"
              hm-swipeup = "onHammer"></div>
         <div class="rightbtn">
-            <button class="button button-large button-dark" ng-click="clickHandle(1)">
-                <div ng-if="settings.leftHandMode">左键</div>
-                <div ng-if="!settings.leftHandMode">右键</div>
-            </button>
+
         </div>
     </div>
 
-    <ion-footer-bar class="bar-dark" keyboard-attach tool-attach>
-        <button class="button button-dark toolbar-btn" ng-click="showToolbar()">1</button>
-        <button class="button button-dark toolbar-btn" ng-click="showToolbar()">2</button>
-        <button class="button button-dark toolbar-btn" ng-click="showToolbar()">3</button>
-        <button class="button button-dark toolbar-btn" ng-click="showToolbar()">4</button>
-        <button class="button button-dark toolbar-btn" ng-click="showToolbar()">5</button>
-        <button class="button button-dark toolbar-btn toolbar-lastbtn" ng-click="showToolbar()">6</button>
+    <ion-footer-bar class="bar-dark" ng-class="{true: 'foot-bar-up', false: 'foot-bar-down'}[toolbarShowed]" keyboard-attach>
+        <button class="toolbar-btn icon"
+                ng-class="{true: 'ion-android-arrow-dropup', false: 'ion-android-arrow-dropdown'}[toolbarShowed]" ng-click="showToolbar(0)"></button>
+        <button class="toolbar-btn icon ion-ios-calculator" ng-click="showToolbar(1)"></button>
+        <button class="toolbar-btn icon ion-document" ng-click="showToolbar(2)"></button>
+        <button class="toolbar-btn icon ion-images" ng-click="showToolbar(3)"></button>
+        <button class="toolbar-btn icon ion-ios-videocam" ng-click="showToolbar(4)"></button>
+        <button class="toolbar-btn icon ion-ios-gear" ng-click="showToolbar(5)"></button>
     </ion-footer-bar>
     <div class="row toolbar" ng-show="toolbarShowed">
-        <div class="p1">
-            <div class="col">.col</div>
-            <div class="col">.col</div>
-            <div class="col">.col</div>
-            <div class="col">.col</div>
-            <div class="col">.col</div>
-        </div>
+        <button class="css_btn_class"><span ng-bind="buttonTxt"></span></button>
+        <button class="css_btn_class"><span ng-bind="buttonTxt"></span></button>
+        <button class="css_btn_class"><span ng-bind="buttonTxt"></span></button>
+        <button class="css_btn_class"><span ng-bind="buttonTxt"></span></button>
+        <button class="css_btn_class"><span ng-bind="buttonTxt"></span></button>
     </div>
 </ion-content>
 </ion-view>
