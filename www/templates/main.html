@@ -1,71 +1,80 @@
 <style type="text/css">
+
+    button {
+        background-color: #191919;
+        color: #191919;
+        border: 1px solid #666666;
+    }
+
     .target {
         display: inline-block;
         margin: auto;
         text-align: center;
         color: white;
-        background-color: #444;
+        background-image: url(./img/kong_bg.jpg);
     }
 
     .toolbar {
         height: 200px;
-        background:#000;
+        background: #222222;
         position: absolute;
         bottom: 0px;
     }
 
     .toolbar-btn {
-        background-color: #444;
-        color: #fff;
+        background-color: #191919;
+        color: #191919;
         margin: auto;
-        border-radius: 2px;
-
-        z-index: 1;
-        padding: 0 8px;
-        min-width: initial;
-        min-height: 31px;
-        font-weight: 400;
-        font-size: 13px;
-        line-height: 32px;
+        width: 100%;
+        height: 100%;
+        border: 0px;
+        background-size: 30px 30px;
     }
 
-    .bar-dark button {
-        width: 1000px;
+    .bar_foot {
+        height: 60px;
+        background: #191919;
+        color: #191919;
+        border-radius: 0px;
+    }
+
+    .bar_foot button {
         border-left:0px;
         border-right: 1px solid #fff;
         border-bottom: 0px;
         border-top: 0px;
     }
 
-    .bar-dark button:last-child {
+    .bar_foot button:last-child {
         border-left:0;
         border-right: 0;
         border-bottom: 0;
         border-top: 0;
     }
 
+    .btn_current,
     .toolbar-btn.active,
-    .toolbar-btn.activated {
-        background-color: #000;
+    .toolbar-btn.activated,
+    .css_btn_class.active,
+    .css_btn_class.activated,
+    .volumn_btn_class.active,
+    .volumn_btn_class.activated {
         background-color: #262626;
         box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.1);
     }
 
     .css_btn_class {
-        background-color: #444;
-        color: #fff;
+        border-radius: 5px;
+        width: 50px;
+        height: 50px;
         margin: auto;
-        border-radius: 7px;
-        width: 100px;
-        height: 100px;
     }
 
     .click-bar {
         position: absolute;
         width: 100%;
         height: 200px;
-        background: #555555;
-        border:1px solid #f7f7f7;
+        border: 0px;
     }
 
     .click-bar-up {
@@ -90,33 +99,163 @@
     .leftbtn {
         width: 40%;
         background: #888888;
+        border-top-left-radius: 150px;
     }
 
     .rightbtn {
         width: 40%;
         background: #888888;
+        border-top-right-radius: 150px;
     }
 
     .wheel {
         width: 20%;
         background: #007aff;
     }
+
+    .pointer {
+        width: 30px;
+        min-height: 30px;
+        height: 30px;
+        border-radius: 15px;
+        background-color: #11c1f3;
+        transform-origin: 100px 50%;
+        position: fixed;
+        background: -webkit-radial-gradient(circle, #007aff, #11c1f3, #d1d3d6); /* Safari 5.1 - 6.0 */
+        background: -o-radial-gradient(circle, #007aff, #11c1f3, #d1d3d6); /* Opera 11.6 - 12.0 */
+        background: -moz-radial-gradient(circle, #007aff, #11c1f3, #d1d3d6); /* Firefox 3.6 - 15 */
+        background: radial-gradient(circle, #007aff, #11c1f3, #d1d3d6); /* 标准的语法（必须放在最后） */
+    }
+
+    .button_img {
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: 30px 30px;
+    }
+
+    .keyboard {
+        background-image: url(./img/button_02.png);
+    }
+    .keyboard.active,
+    .keyboard.activated {
+        background-image: url(./img/button_02a.png);
+    }
+
+    .dropdown {
+        background-image: url(./img/button_01.png);
+    }
+    .dropdown.active,
+    .dropdown.activated {
+        background-image: url(./img/button_01a.png);
+    }
+
+    .document {
+        background-image: url(./img/button_03.png);
+    }
+    .document.active,
+    .document.activated {
+        background-image: url(./img/button_03a.png);
+    }
+
+    .images {
+        background-image: url(./img/button_04.png);
+    }
+    .images.active,
+    .images.activated {
+        background-image: url(./img/button_04a.png);
+    }
+
+    .videocam {
+        background-image: url(./img/button_05.png);
+    }
+    .videocam.active,
+    .videocam.activated {
+        background-image: url(./img/button_05a.png);
+    }
+
+    .gear {
+        background-image: url(./img/button_06.png);
+    }
+    .gear.active,
+    .gear.activated {
+        background-image: url(./img/button_06a.png);
+    }
+
+    .backward {
+        background-image: url(./img/button_08.png);
+    }
+    .backward.active,
+    .backward.activated {
+        background-image: url(./img/button_08a.png);
+    }
+
+    .forward {
+        background-image: url(./img/button_09.png);
+    }
+    .forward.active,
+    .forward.activated {
+        background-image: url(./img/button_09a.png);
+    }
+
+    .shrink {
+        background-image: url(./img/button_07a.png);
+    }
+
+    .expand {
+        background-image: url(./img/button_07.png);
+    }
+
+    .pause {
+        background-image: url(./img/button_10a.png);
+    }
+
+    .play {
+        background-image: url(./img/button_10.png);
+    }
+
+    .volumns {
+        width: 100%;
+        height: 35px;
+        position: absolute;
+        bottom: 20px;
+    }
+
+    .volumn_btn_class {
+        width: 50px;
+        height: 55px;
+        background-color: #222222;
+        color: #222222;
+        border: 0px;
+        background-size: 30px 30px;
+    }
+
+    .volumn_down {
+        background-image: url(./img/button_11.png);
+    }
+
+    .volumn_up {
+        background-image: url(./img/button_12.png);
+    }
+
+    .volumn_mute {
+        margin-right: -40%;
+        background-image: url(./img/button_13.png);
+    }
 </style>
 
 <ion-view view-title="主面板">
   <ion-content scroll="false" class="target"
                hm-pan = "onHammer"
-               hm-doubletap = "onHammer"
                hm-tap = "onHammer"
                hm-press = "onHammer">
+
+    <div class="pointer" ng-style="{'top': fixedY, 'left': fixedX}"></div>
 
     <div class="click-bar" ng-class="{true: 'click-bar-up', false: 'click-bar-down'}[toolbarShowed]">
         <div class="leftbtn">
 
         </div>
         <div class="wheel"
-             hm-swipeleft = "onHammer"
-             hm-swiperight = "onHammer"
              hm-swipedown = "onHammer"
              hm-swipeup = "onHammer"></div>
         <div class="rightbtn">
@@ -124,21 +263,34 @@
         </div>
     </div>
 
-    <ion-footer-bar class="bar-dark" ng-class="{true: 'foot-bar-up', false: 'foot-bar-down'}[toolbarShowed]" keyboard-attach>
-        <button class="toolbar-btn icon"
-                ng-class="{true: 'ion-android-arrow-dropup', false: 'ion-android-arrow-dropdown'}[toolbarShowed]" ng-click="showToolbar(0)"></button>
-        <button class="toolbar-btn icon ion-ios-calculator" ng-click="showToolbar(1)"></button>
-        <button class="toolbar-btn icon ion-document" ng-click="showToolbar(2)"></button>
-        <button class="toolbar-btn icon ion-images" ng-click="showToolbar(3)"></button>
-        <button class="toolbar-btn icon ion-ios-videocam" ng-click="showToolbar(4)"></button>
-        <button class="toolbar-btn icon ion-ios-gear" ng-click="showToolbar(5)"></button>
+    <ion-footer-bar class="bar_foot" ng-class="{true: 'foot-bar-up', false: 'foot-bar-down'}[toolbarShowed]" keyboard-attach>
+        <button class="toolbar-btn button_img dropdown"
+                ng-class="{'btn_current': curIndex==0}" ng-click="showToolbar(0)"></button>
+        <button class="toolbar-btn button_img keyboard"
+                ng-class="{'btn_current': curIndex==1}" ng-click="showToolbar(1)"></button>
+        <button class="toolbar-btn button_img document"
+                ng-class="{'btn_current': curIndex==2}" ng-click="showToolbar(2)"></button>
+        <button class="toolbar-btn button_img images"
+                ng-class="{'btn_current': curIndex==3}" ng-click="showToolbar(3)"></button>
+        <button class="toolbar-btn button_img videocam"
+                ng-class="{'btn_current': curIndex==4}" ng-click="showToolbar(4)"></button>
+        <button class="toolbar-btn button_img gear"
+                ng-class="{'btn_current': curIndex==5}" ng-click="showToolbar(5)"></button>
     </ion-footer-bar>
     <div class="row toolbar" ng-show="toolbarShowed">
-        <button class="css_btn_class"><span ng-bind="buttonTxt"></span></button>
-        <button class="css_btn_class"><span ng-bind="buttonTxt"></span></button>
-        <button class="css_btn_class"><span ng-bind="buttonTxt"></span></button>
-        <button class="css_btn_class"><span ng-bind="buttonTxt"></span></button>
-        <button class="css_btn_class"><span ng-bind="buttonTxt"></span></button>
+        <button class="css_btn_class button_img"
+                ng-class="{true: 'shrink', false: 'expand'}[buttonStates.fullscreen]"
+                ng-click="buttonClick(0)"></button>
+        <button class="css_btn_class button_img backward"></button>
+        <button class="css_btn_class button_img"
+                ng-class="{true: 'pause', false: 'play'}[buttonStates.play]"
+                ng-click="buttonClick(2)"></button>
+        <button class="css_btn_class button_img forward"></button>
+    </div>
+    <div class="volumns" ng-show="toolbarShowed">
+      <button class="volumn_btn_class volumn_down button_img"></button>
+      <button class="volumn_btn_class volumn_up button_img"></button>
+      <button class="volumn_btn_class volumn_mute button_img"></button>
     </div>
 </ion-content>
 </ion-view>

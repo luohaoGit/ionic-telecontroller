@@ -129,22 +129,37 @@ angular.module('starter.controllers', ['hmTouchEvents'])
   $scope.deltaY = 0;
   $scope.toolbarShowed = false;
   $scope.keyboardShowed = false;
-  $scope.buttonTxt = "";
+  $scope.curIndex = 1;
+  $scope.buttonStates = {
+    play: false,
+    fullscreen: false
+  }
+
+  $scope.buttonClick = function (index) {
+    if(index == 0){
+      $scope.buttonStates.fullscreen = !$scope.buttonStates.fullscreen;
+    }else if(index == 1){
+
+    }else if(index == 2){
+      $scope.buttonStates.play = !$scope.buttonStates.play;
+    }else if(index == 3){
+
+    }
+  }
 
   $scope.showToolbar = function(index){
+    $scope.curIndex = index;
     if(index == 0){
-      $scope.buttonTxt = 3;
+      $scope.curIndex = 1;
       $scope.toolbarShowed = !$scope.toolbarShowed;
     }else if(index == 1){
       $scope.toolbarShowed = false;
     }else if(index == 2){
-      $scope.buttonTxt = index;
+
     }else if(index == 3){
-      $scope.buttonTxt = index;
+
     }else if(index == 4){
-      $scope.buttonTxt = index;
-    }else if(index == 5){
-      $scope.buttonTxt = index;
+
     }
 
     if(index == 1){
@@ -163,9 +178,18 @@ angular.module('starter.controllers', ['hmTouchEvents'])
     }
   }
 
+  $scope.fixedX = 0;
+  $scope.fixedY = 0;
+
   $scope.onHammer = function(event) {
     var type = event.type;
     var data = [];
+
+    if(event.srcEvent.touches[0] && event.srcEvent.touches[0].pageX){
+      $scope.fixedX = event.srcEvent.touches[0].pageX + "px";
+      $scope.fixedY = event.srcEvent.touches[0].pageY + "px";
+    }
+
     if(type == 'pan') {
       $scope.command = {beginY:0, beginX:0};
       $scope.command.moveX = (event.deltaX - $scope.deltaX) * $rootScope.settings.sensitivity;
@@ -180,8 +204,6 @@ angular.module('starter.controllers', ['hmTouchEvents'])
       data.push(JSON.stringify($scope.command));
     }else if(type == 'tap'){
       data = data.concat(1, 2, 3);
-    }else if(type == 'doubletap'){
-      data = data.concat(1, 2, 5);
     }else if(type == 'press'){
       data = data.concat(1, 2, 5);
       //cordova.plugins.Keyboard.show();
@@ -189,10 +211,6 @@ angular.module('starter.controllers', ['hmTouchEvents'])
       data = data.concat(1, 2, 17);
     }else if(type == 'swipedown'){
       data = data.concat(1, 2, 18);
-    }else if(type == 'swipeleft'){
-      data = data.concat(1, 2, 19);
-    }else if(type == 'swiperight'){
-      data = data.concat(1, 2, 20);
     }
 
     $websocket.send(data.join(separator));
