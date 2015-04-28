@@ -1,68 +1,26 @@
 angular.module('starter.controllers', ['hmTouchEvents'])
 
-.controller('LoginCtrl', function($scope, LoginService, $state, $ionicPopup, $ionicLoading, $rootScope) {
-  $scope.loginData = {
-    username: localStorage.username,
-    password: localStorage.password
-  }
-
-  if(localStorage.userdata){//离线登录
-    $state.go('app.main');
-  }
-
-  $scope.login = function(){
-    $ionicLoading.show({
-      template: '正在登录...'
-    });
-
-    LoginService.login($scope.loginData.username, $scope.loginData.password).success(function (data) {
-      localStorage.username = $scope.loginData.username;
-      localStorage.password = $scope.loginData.password;
-      if(angular.isObject(data)){
-        localStorage.token = JSON.stringify(data.retMsg);
-        localStorage.userdata = JSON.stringify(data.retObj[0]);
-      }
-      $ionicLoading.hide();
-      $state.go('app.main');
-    }).error(function (data) {
-      $ionicLoading.hide();
-      var alertPopup = $ionicPopup.alert({
-        title: '登录失败',
-        template: '请检查您的用户名和密码'
-      });
-    });
-  }
-})
-
-.controller('AppCtrl', function($scope, $ionicModal, $timeout, $websocket, $ionicLoading, $ionicPopup, defaultAvatar, $ionicPopover) {
-  // Form data for the login modal
+.controller('LoginCtrl', function($scope, LoginService, $state, $ionicPopup, $ionicLoading, $websocket, $rootScope) {
   $scope.connectData = {
     ip: localStorage.ip,
     port: localStorage.port ? parseInt(localStorage.port) : 6666
   };
 
-  $scope.defaultAvatar = defaultAvatar;
-  $scope.userData = localStorage.userdata ? JSON.parse(localStorage.userdata) : {};
+  $scope.loginData = {
+    username: localStorage.username,
+    password: localStorage.password
+  };
 
-  $ionicModal.fromTemplateUrl('templates/connect.html', {
-    scope: $scope
-  }).then(function(modal) {
-    $scope.modal = modal;
+  $scope.otherData = {
+    showLogin: false,
+    leftHandMode: false
+  }
+
+  $scope.$watch('otherData.leftHandMode', function(newVal){
+    localStorage.leftHandMode = newVal;
   });
 
-  // Triggered in the login modal to close it
-  $scope.closeLogin = function() {
-    $scope.modal.hide();
-  };
-
-  // Open the login modal
-  $scope.login = function() {
-    $scope.modal.show();
-  };
-
-  // Perform the login action when the user submits the login form
-  $scope.connect = function() {
-
+  $scope.connectAndLogin = function(){
     $ionicLoading.show({
       template: '正在连接...'
     });
@@ -72,7 +30,36 @@ angular.module('starter.controllers', ['hmTouchEvents'])
 
     $websocket.open($scope.connectData.ip, $scope.connectData.port).then(function(){
       $ionicLoading.hide();
-      $scope.closeLogin();
+
+      if($scope.otherData.showLogin){//需要登录
+
+        $ionicLoading.show({
+          template: '正在登录...'
+        });
+
+        if(localStorage.token && localStorage.username == $scope.loginData.username){//已经登陆过就不用再登录
+          $ionicLoading.hide();
+          $state.go('app.main');
+        }else{
+          LoginService.login($scope.loginData.username, $scope.loginData.password).success(function (data) {
+            localStorage.username = $scope.loginData.username;
+            localStorage.password = $scope.loginData.password;
+            if(angular.isObject(data)){
+              localStorage.token = JSON.stringify(data.retMsg);
+              localStorage.userdata = JSON.stringify(data.retObj[0]);
+            }
+            $ionicLoading.hide();
+            $state.go('app.main');
+          }).error(function (data) {
+            $ionicLoading.hide();
+            var alertPopup = $ionicPopup.alert({
+              title: '登录失败',
+              template: '请检查您的用户名和密码'
+            });
+          });
+        }
+      }
+
     }, function(){
       $ionicLoading.hide();
       $ionicPopup.alert({
@@ -83,7 +70,14 @@ angular.module('starter.controllers', ['hmTouchEvents'])
         $ionicLoading.hide();
       });
     });
-  };
+  }
+})
+
+.controller('AppCtrl', function($scope, $ionicModal, $timeout, $ionicLoading, $ionicPopup, defaultAvatar, $ionicPopover) {
+
+  $scope.defaultAvatar = defaultAvatar;
+  $scope.userData = localStorage.userdata ? JSON.parse(localStorage.userdata) : {};
+
 })
 
 .controller('SettingsCtrl', function($scope, $rootScope, $state) {
