@@ -1,17 +1,223 @@
+<style type="text/css">
+
+    span {
+        display: table;
+        padding: 7px 10px 7px 0px;
+        max-width: 200px;
+        width: 15%;
+        color: #CCC;
+        font-size: 16px;
+    }
+
+    label {
+        text-overflow: ellipsis;
+        white-space: nowrap;
+
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: -moz-box;
+        display: -moz-flex;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        -webkit-align-items: center;
+        -moz-align-items: center;
+        align-items: center;
+        position: relative;
+        overflow: hidden;
+    }
+
+    input[type="text"] {
+        border: 0;
+        border-radius: 0;
+        -webkit-border-radius: 0;
+        -webkit-box-flex: 1;
+        -webkit-flex: 1 220px;
+        -moz-box-flex: 1;
+        -moz-flex: 1 220px;
+        -ms-flex: 1 220px;
+        flex: 1 220px;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        margin: 0;
+        padding-right: 24px;
+        background-color: transparent;
+        outline-style: none;
+        outline-width: 0;
+        background-image: none;
+    }
+
+    .login_container {
+        width: 100%;
+        height:100%;
+        position: absolute;
+    }
+
+    .login_header {
+        width: 100%;
+        height: 20%;
+        background-image: url(./img/logo.jpg);
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: 100% 100%;
+    }
+
+    .connect_content {
+        height: 20%;
+    }
+
+    .input_label {
+        margin: 8px 21px;
+        padding: 7px 0 7px 16px;
+        border-color: #ddd;
+        border-width: 1px;
+        border-style: solid;
+        border-radius: 6px;
+        -webkit-border-radius: 6px;
+    }
+
+    .setting_label {
+        margin: 1px 21px;
+        padding: 2px 0 2px 16px;
+    }
+
+    .setting_span {
+
+    }
+
+    .setting_content {
+        height: 15%;
+    }
+
+    .toggle.toggle-blue input:checked + .track,
+    .checkbox-blue input:checked:before, .checkbox-assertive input:checked + .checkbox-icon:before {
+        border-color: #1F98E7;
+        background-color: #1F98E7;
+    }
+
+    .handel_left {
+        position: absolute;
+        top: 12px;
+        left: 12px;
+    }
+
+    .handel_right {
+        position: absolute;
+        top: 12px;
+        left: 35px;
+    }
+
+    .button.button-sky {
+        border-color: #66C5FD;
+        background-color: #66C5FD;
+        color: #fff;
+        margin: 17px 0;
+        border-radius: 4px;
+    }
+
+    .button-sky.active,
+    .button-sky.activated {
+        border-color: #12AFFC;
+        background-color: #12AFFC;
+    }
+
+    .login_content {
+        height: 20%;
+    }
+
+    .user_span {
+        background-image: url(./img/icon_01.jpg);
+        background-repeat: no-repeat;
+        background-position: left;
+        background-size: 18px 16px
+    }
+
+    .pwd_span {
+        background-image: url(./img/icon_02.jpg);
+        background-repeat: no-repeat;
+        background-position: left;
+        background-size: 18px 16px
+    }
+
+    .login_buttton {
+        height: 10%;
+        padding: 0 20px;
+    }
+
+    .login_footer {
+        height: 15%;
+        text-align: center;
+    }
+
+</style>
+
 <ion-view view-title="登录" name="login-view">
-  <ion-content class="padding">
+  <ion-content scroll="false">
       <form name="loginForm" ng-submit="login()">
-          <div class="list list-inset">
-              <label class="item item-input">
-                  <input type="text" required="false" maxlength="20" minlength="2"
-                         autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
-                         placeholder="用户名" ng-model="loginData.username">
-              </label>
-              <label class="item item-input">
-                  <input type="password" required="false" placeholder="密码" minlength="6" maxlength="20" ng-model="loginData.password">
-              </label>
+
+          <div class="login_container">
+
+              <div class="login_header"></div>
+
+              <div class="connect_content">
+                  <label class="input_label">
+                      <span class="input_span">IP</span>
+                      <input type="text" name="ip" autocomplete="off" ng-model="connectData.ip"
+                             placeholder="输入IP" maxlength="15" required
+                             ng-pattern="/^(\d+)\.(\d+)\.(\d+)\.(\d+)$/" />
+                  </label>
+                  <label class="input_label">
+                      <span class="input_span">端口</span>
+                      <input type="number" name="port" autocomplete="off" ng-model="connectData.port"
+                             placeholder="输入端口" maxlength="5" required
+                             ng-pattern="/\d+/" />
+                  </label>
+              </div>
+
+              <div class="setting_content">
+                  <label class="setting_label">
+                      <span class="setting_span">左手习惯鼠标</span>
+                      <label class="toggle toggle-blue">
+                          <input type="checkbox">
+                          <div class="track">
+                              <div class="handel_left">开</div>
+                              <div class="handle"></div>
+                              <div class="handel_right">关</div>
+                          </div>
+                      </label>
+                  </label>
+                  <label class="setting_label">
+                      <span class="setting_span">登录账号并连接</span>
+                      <label class="checkbox checkbox-blue">
+                          <input type="checkbox">
+                      </label>
+                  </label>
+              </div>
+
+              <div class="login_content">
+                  <label class="input_label">
+                      <span class="input_span user_span"></span>
+                      <input type="text" required="false" maxlength="20" minlength="2"
+                             autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+                             placeholder="输入账号" ng-model="loginData.username">
+                  </label>
+                  <label class="input_label">
+                      <span class="input_span pwd_span"></span>
+                      <input type="password" required="false" placeholder="输入密码" minlength="6" maxlength="20" ng-model="loginData.password">
+                  </label>
+              </div>
+
+              <div class="login_buttton">
+                  <button class="button button-block button-sky" type="submit" ng-disabled="connectForm.$invalid">确认连接</button>
+              </div>
+
+              <div class="login_footer">
+                  版权所有：江苏省教育信息服务有限公司
+              </div>
+
           </div>
-          <button type="submit" class="button button-block button-positive" ng-disabled="loginForm.$invalid">登录</button>
       </form>
   </ion-content>
 </ion-view>

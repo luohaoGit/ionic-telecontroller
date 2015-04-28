@@ -84,21 +84,6 @@ angular.module('starter.controllers', ['hmTouchEvents'])
       });
     });
   };
-
-/*  $ionicPopover.fromTemplateUrl('templates/popover.html', {
-    scope: $scope
-  }).then(function(popover) {
-    $scope.popover = popover;
-  });
-
-  $scope.show = function($event) {
-    $websocket.close();
-    $scope.popover.show($event);
-  }
-
-  $scope.$on('$destroy', function() {
-    //$scope.popover.remove();
-  });*/
 })
 
 .controller('SettingsCtrl', function($scope, $rootScope, $state) {
