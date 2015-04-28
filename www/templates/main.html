@@ -91,26 +91,44 @@
         bottom: 0px;
     }
 
-    .click-bar div{
+    .click-bar button{
         float: left;
         height: 100%;
+        border: 0px;
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: 100% 100%;
     }
 
     .leftbtn {
         width: 40%;
-        background: #888888;
-        border-top-left-radius: 150px;
+        background-color: #413C42;
+        background-image: url(./img/left.png);
+    }
+
+    .leftbtn.active,
+    .leftbtn.activated {
+        background-image: url(./img/left_a.png);
     }
 
     .rightbtn {
         width: 40%;
-        background: #888888;
-        border-top-right-radius: 150px;
+        background-color: #484649;
+        background-image: url(./img/right.png);
+    }
+
+    .rightbtn.active,
+    .rightbtn.activated {
+        background-image: url(./img/right_a.png);
     }
 
     .wheel {
         width: 20%;
-        background: #007aff;
+        background-color: #454346;
+        background-image: url(./img/Middle.png);
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: 100% 100%;
     }
 
     .pointer {
@@ -252,15 +270,11 @@
     <div class="pointer" ng-style="{'top': fixedY, 'left': fixedX}"></div>
 
     <div class="click-bar" ng-class="{true: 'click-bar-up', false: 'click-bar-down'}[toolbarShowed]">
-        <div class="leftbtn">
-
-        </div>
-        <div class="wheel"
+        <button class="leftbtn"></button>
+        <button class="wheel"
              hm-swipedown = "onHammer"
-             hm-swipeup = "onHammer"></div>
-        <div class="rightbtn">
-
-        </div>
+             hm-swipeup = "onHammer"></button>
+        <button class="rightbtn"></button>
     </div>
 
     <ion-footer-bar class="bar_foot" ng-class="{true: 'foot-bar-up', false: 'foot-bar-down'}[toolbarShowed]" keyboard-attach>
