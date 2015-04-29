@@ -75,6 +75,8 @@ angular.module('starter.controllers', ['hmTouchEvents'])
             });
           });
         }
+      }else{
+        $state.go('app.main');
       }
 
     }, function(){
