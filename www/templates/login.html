@@ -1,6 +1,6 @@
 <style type="text/css">
 
-    span {
+    .login_container span {
         display: table;
         padding: 7px 10px 7px 0px;
         max-width: 200px;
@@ -57,15 +57,15 @@
 
     .login_header {
         width: 100%;
-        height: 20%;
+        height: 100px;
         background-image: url(./img/logo.jpg);
         background-repeat: no-repeat;
         background-position: center;
-        background-size: 100% 100%;
+        background-size: 100% 100px;
     }
 
     .connect_content {
-        height: 20%;
+
     }
 
     .input_label {
@@ -88,7 +88,7 @@
     }
 
     .setting_content {
-        height: 15%;
+
     }
 
     .toggle.toggle-blue input:checked + .track,
@@ -124,7 +124,7 @@
     }
 
     .login_content {
-        height: 20%;
+
     }
 
     .user_span {
@@ -142,12 +142,10 @@
     }
 
     .login_buttton {
-        height: 10%;
         padding: 0 20px;
     }
 
     .login_footer {
-        height: 15%;
         text-align: center;
     }
 
@@ -165,14 +163,12 @@
                   <label class="input_label">
                       <span class="input_span">IP</span>
                       <input type="text" name="ip" autocomplete="off" ng-model="connectData.ip"
-                             placeholder="输入IP" maxlength="15" required
-                             ng-pattern="/^(\d+)\.(\d+)\.(\d+)\.(\d+)$/" />
+                             placeholder="输入IP" />
                   </label>
                   <label class="input_label">
                       <span class="input_span">端口</span>
                       <input type="number" name="port" autocomplete="off" ng-model="connectData.port"
-                             placeholder="输入端口" maxlength="5" required
-                             ng-pattern="/\d+/" />
+                             placeholder="输入端口" />
                   </label>
               </div>
 
@@ -199,13 +195,15 @@
               <div class="login_content" ng-show="otherData.showLogin">
                   <label class="input_label">
                       <span class="input_span user_span"></span>
-                      <input type="text" required="false" maxlength="20" minlength="2"
+                      <input type="text" name="username" required="false" maxlength="20" minlength="2"
                              autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
-                             placeholder="输入账号" ng-model="loginData.username">
+                             placeholder="输入账号" ng-model="loginData.username" ng-disabled="!otherData.showLogin">
                   </label>
                   <label class="input_label">
                       <span class="input_span pwd_span"></span>
-                      <input type="password" required="false" placeholder="输入密码" minlength="6" maxlength="20" ng-model="loginData.password">
+                      <input type="password" name="pwd" required="false" placeholder="输入密码" minlength="6" maxlength="20"
+                             autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+                             ng-model="loginData.password" ng-disabled="!otherData.showLogin">
                   </label>
               </div>
 

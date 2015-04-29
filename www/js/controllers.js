@@ -21,6 +21,23 @@ angular.module('starter.controllers', ['hmTouchEvents'])
   });
 
   $scope.connectAndLogin = function(){
+
+    if(!/^(\d+)\.(\d+)\.(\d+)\.(\d+)$/.test($scope.connectData.ip)){
+      $ionicPopup.alert({
+        title: '提示',
+        template: '请输入正确IP'
+      });
+      return;
+    }
+
+    if(!/\d+/.test($scope.connectData.port)){
+      $ionicPopup.alert({
+        title: '提示',
+        template: '请输入正确端口'
+      });
+      return;
+    }
+
     $ionicLoading.show({
       template: '正在连接...'
     });
