@@ -1,5 +1,12 @@
 angular.module('starter.controllers', ['hmTouchEvents'])
 
+.controller('AppCtrl', function($scope, $ionicModal, $timeout, $ionicLoading, $ionicPopup, defaultAvatar, $ionicPopover) {
+
+  $scope.defaultAvatar = defaultAvatar;
+  $scope.userData = localStorage.userdata ? JSON.parse(localStorage.userdata) : {};
+
+})
+
 .controller('LoginCtrl', function($scope, LoginService, $state, $ionicPopup, $ionicLoading, $websocket, $rootScope) {
   $scope.connectData = {
     ip: localStorage.ip,
@@ -92,34 +99,7 @@ angular.module('starter.controllers', ['hmTouchEvents'])
   }
 })
 
-.controller('AppCtrl', function($scope, $ionicModal, $timeout, $ionicLoading, $ionicPopup, defaultAvatar, $ionicPopover) {
-
-  $scope.defaultAvatar = defaultAvatar;
-  $scope.userData = localStorage.userdata ? JSON.parse(localStorage.userdata) : {};
-
-})
-
-.controller('SettingsCtrl', function($scope, $rootScope, $state) {
-  $scope.changeMode = function(){
-    localStorage.leftHandMode = $rootScope.settings.leftHandMode;
-  }
-
-  $scope.$watch('settings.sensitivity', function(newVal){
-    localStorage.sensitivity = newVal;
-  });
-
-  $scope.logout = function(){
-    localStorage.removeItem("userdata");
-    localStorage.removeItem("password");
-    $state.go('login');
-  }
-
-  $scope.exit = function(){
-    ionic.Platform.exitApp();
-  }
-})
-
-.controller('MainCtrl', function($scope, $rootScope, $stateParams, $websocket, $ionicPopover) {
+.controller('MainCtrl', function($scope, $rootScope, $stateParams, $websocket, $ionicModal) {
   var separator = "===!@#";
   $scope.command = {};
   $scope.otherData = {};
@@ -158,6 +138,8 @@ angular.module('starter.controllers', ['hmTouchEvents'])
 
     }else if(index == 4){
 
+    }else if(index == 5){
+      $scope.modal.show();
     }
 
     if(index == 1){
@@ -230,4 +212,36 @@ angular.module('starter.controllers', ['hmTouchEvents'])
     }
     $websocket.send(data.join(separator));
   }
+
+
+  // Create the login modal that we will use later
+  $ionicModal.fromTemplateUrl('templates/settings.html', {
+    scope: $scope
+  }).then(function(modal) {
+    $scope.modal = modal;
+  });
+
+  // Triggered in the login modal to close it
+  $scope.closeModel = function() {
+    $scope.modal.hide();
+  };
+
+  $scope.changeMode = function(){
+    localStorage.leftHandMode = $rootScope.settings.leftHandMode;
+  }
+
+  $scope.$watch('settings.sensitivity', function(newVal){
+    localStorage.sensitivity = newVal;
+  });
+
+  $scope.logout = function(){
+    localStorage.removeItem("userdata");
+    localStorage.removeItem("password");
+    $state.go('login');
+  }
+
+  $scope.exit = function(){
+    ionic.Platform.exitApp();
+  }
+
 });

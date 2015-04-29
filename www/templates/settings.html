@@ -1,27 +1,126 @@
-<ion-view view-title="设置">
-  <ion-content class="padding">
-    <div class="list">
+<style>
 
-      <ion-toggle toggle-class="toggle-positive" ng-model="settings.leftHandMode" ng-change="changeMode()">
-        左手模式
-      </ion-toggle>
+  .toggle.toggle-blue input:checked + .track,
+  .checkbox-blue input:checked:before, .checkbox-assertive input:checked + .checkbox-icon:before {
+    border-color: #1F98E7;
+    background-color: #1F98E7;
+  }
 
-      <div class="item range range-positive">
-        鼠标灵敏度
-        <i class="icon ion-ios7-sunny-outline"></i>
-        <input type="range" name="volume" min="1" max="5" ng-model="settings.sensitivity">
-        <i class="icon ion-ios7-sunny"></i>
+  .handel_left {
+    position: absolute;
+    top: 12px;
+    left: -12px;
+  }
+
+  .handel_right {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+  }
+
+  .title_img {
+    background-image: url(./img/set_title.png);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 100% 100%;
+  }
+
+  .content_div {
+    background-image: url(./img/set_bg.jpg);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 100% 100%;
+
+    width: 100%;
+    height:100%;
+    position: absolute;
+  }
+
+  .content_div div {
+    width: 100%;
+    margin: auto;
+  }
+
+  .div_item {
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+    border-bottom-color: White;
+    text-align: center;
+    padding: 20px 20px;
+  }
+
+  .a_item {
+    position: relative;
+    z-index: 2;
+    margin: -1px;
+    padding: 16px;
+    font-size: 16px;
+    color: White;
+    text-decoration: none;
+  }
+
+</style>
+
+<ion-modal-view>
+  <ion-header-bar class="title_img">
+    <div class="buttons">
+      <button class="button button-clear" style="color: White;" ng-click="closeModel()">确认</button>
+    </div>
+    <h1 class="title">系统设置</h1>
+  </ion-header-bar>
+  <ion-content scroll="false">
+    <div class="content_div">
+
+      <div class="div_item">
+        <a class="a_item" href="javascript:;">
+          左手习惯鼠标
+        </a>
+        <label class="toggle toggle-blue">
+          <input type="checkbox" ng-model="settings.leftHandMode" ng-change="changeMode()">
+          <div class="track">
+            <div class="handel_left" ng-show="settings.leftHandMode">开</div>
+            <div class="handle"></div>
+            <div class="handel_right" ng-show="!settings.leftHandMode">关</div>
+          </div>
+        </label>
       </div>
 
-      <a class="item item-icon-right" href="javascript:;" ng-click="logout()">
-        <i class="icon ion-ios7-arrow-right"></i>
-        注销账号
-      </a>
+      <div class="div_item">
+        <a class="a_item" href="javascript:;">
+          鼠标灵敏度
+        </a>
+        <div class="range range-positive">
+          <i class="icon ion-ios7-sunny-outline"></i>
+          <input type="range" name="volume" min="1" max="5" ng-model="settings.sensitivity">
+          <i class="icon ion-ios7-sunny"></i>
+        </div>
+      </div>
 
-      <a class="item item-icon-right" href="javascript:;" ng-click="exit()">
-        退出
-      </a>
+      <div class="div_item">
+        <a class="a_item" href="javascript:;">
+          IP
+        </a>
+        <input style="display:inline;" type="text">
+      </div>
 
+      <div class="div_item">
+        <a class="a_item" href="javascript:;">
+          端口
+        </a>
+        <input style="display:inline;" type="text">
+      </div>
+
+      <div class="div_item">
+        <a class="a_item" href="javascript:;" ng-click="logout()">
+          注销账号
+        </a>
+      </div>
+
+      <div class="div_item">
+        <a class="a_item" href="javascript:;" ng-click="exit()">
+          退出应用
+        </a>
+      </div>
     </div>
   </ion-content>
-</ion-view>
+</ion-modal-view>
