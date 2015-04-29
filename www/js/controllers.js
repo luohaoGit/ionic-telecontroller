@@ -202,9 +202,6 @@ angular.module('starter.controllers', ['hmTouchEvents'])
       data.push(JSON.stringify($scope.command));
     }else if(type == 'tap'){
       data = data.concat(1, 2, 3);
-    }else if(type == 'press'){
-      data = data.concat(1, 2, 5);
-      //cordova.plugins.Keyboard.show();
     }else if(type == 'swipeup'){
       data = data.concat(1, 2, 17);
     }else if(type == 'swipedown'){

@@ -95,6 +95,7 @@
         float: left;
         height: 100%;
         border: 0px;
+        background-color:transparent;
         background-repeat: no-repeat;
         background-position: center;
         background-size: 100% 100%;
@@ -102,7 +103,6 @@
 
     .leftbtn {
         width: 40%;
-        background-color: #413C42;
         background-image: url(./img/left.png);
     }
 
@@ -113,7 +113,6 @@
 
     .rightbtn {
         width: 40%;
-        background-color: #484649;
         background-image: url(./img/right.png);
     }
 
@@ -264,17 +263,16 @@
 <ion-view view-title="主面板">
   <ion-content scroll="false" class="target"
                hm-pan = "onHammer"
-               hm-tap = "onHammer"
-               hm-press = "onHammer">
+               hm-tap = "onHammer">
 
     <div class="pointer" ng-style="{'top': fixedY, 'left': fixedX}"></div>
 
     <div class="click-bar" ng-class="{true: 'click-bar-up', false: 'click-bar-down'}[toolbarShowed]">
-        <button class="leftbtn"></button>
+        <button class="leftbtn" ng-click="clickHandle(0)"></button>
         <button class="wheel"
              hm-swipedown = "onHammer"
              hm-swipeup = "onHammer"></button>
-        <button class="rightbtn"></button>
+        <button class="rightbtn" ng-click="clickHandle(1)"></button>
     </div>
 
     <ion-footer-bar class="bar_foot" ng-class="{true: 'foot-bar-up', false: 'foot-bar-down'}[toolbarShowed]" keyboard-attach>
