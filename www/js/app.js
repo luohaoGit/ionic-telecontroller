@@ -17,6 +17,8 @@ angular.module('starter', ['ionic', 'starter.services', 'starter.controllers', '
   }
 
   $rootScope.settings = {
+    ip: localStorage.ip,
+    port: localStorage.port ? parseInt(localStorage.port) : 6666,
     sensitivity: localStorage.sensitivity ? parseInt(localStorage.sensitivity) : 1,
     leftHandMode: localStorage.leftHandMode == 'true' ? true : false
   }

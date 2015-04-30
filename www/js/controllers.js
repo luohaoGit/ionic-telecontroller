@@ -8,10 +8,6 @@ angular.module('starter.controllers', ['hmTouchEvents'])
 })
 
 .controller('LoginCtrl', function($scope, LoginService, $state, $ionicPopup, $ionicLoading, $websocket, $rootScope) {
-  $scope.connectData = {
-    ip: localStorage.ip,
-    port: localStorage.port ? parseInt(localStorage.port) : 6666
-  };
 
   $scope.loginData = {
     username: localStorage.username,
@@ -19,17 +15,16 @@ angular.module('starter.controllers', ['hmTouchEvents'])
   };
 
   $scope.otherData = {
-    showLogin: false,
-    leftHandMode: false
+    showLogin: false
   }
 
-  $scope.$watch('otherData.leftHandMode', function(newVal){
+  $scope.$watch('settings.leftHandMode', function(newVal){
     localStorage.leftHandMode = newVal;
   });
 
   $scope.connectAndLogin = function(){
 
-    if(!/^(\d+)\.(\d+)\.(\d+)\.(\d+)$/.test($scope.connectData.ip)){
+    if(!/^(\d+)\.(\d+)\.(\d+)\.(\d+)$/.test($rootScope.settings.ip)){
       $ionicPopup.alert({
         title: '提示',
         template: '请输入正确IP'
@@ -37,7 +32,7 @@ angular.module('starter.controllers', ['hmTouchEvents'])
       return;
     }
 
-    if(!/\d+/.test($scope.connectData.port)){
+    if(!/\d+/.test($rootScope.settings.port)){
       $ionicPopup.alert({
         title: '提示',
         template: '请输入正确端口'
@@ -49,10 +44,10 @@ angular.module('starter.controllers', ['hmTouchEvents'])
       template: '正在连接...'
     });
 
-    localStorage.ip = $scope.connectData.ip;
-    localStorage.port = $scope.connectData.port;
+    localStorage.ip = $rootScope.settings.ip;
+    localStorage.port = $rootScope.settings.port;
 
-    $websocket.open($scope.connectData.ip, $scope.connectData.port).then(function(){
+    $websocket.open($rootScope.settings.ip, $rootScope.settings.port).then(function(){
       $ionicLoading.hide();
 
       if($scope.otherData.showLogin){//需要登录
@@ -99,7 +94,7 @@ angular.module('starter.controllers', ['hmTouchEvents'])
   }
 })
 
-.controller('MainCtrl', function($scope, $rootScope, $stateParams, $websocket, $ionicModal) {
+.controller('MainCtrl', function($scope, $rootScope, $stateParams, $websocket, $ionicModal, $state) {
   var separator = "===!@#";
   $scope.command = {};
   $scope.otherData = {};
@@ -223,6 +218,8 @@ angular.module('starter.controllers', ['hmTouchEvents'])
 
   // Triggered in the login modal to close it
   $scope.closeModel = function() {
+    localStorage.ip = $rootScope.settings.ip;
+    localStorage.port = $rootScope.settings.port;
     $scope.modal.hide();
   };
 
@@ -236,6 +233,7 @@ angular.module('starter.controllers', ['hmTouchEvents'])
 
   $scope.logout = function(){
     localStorage.removeItem("userdata");
+    localStorage.removeItem("token");
     localStorage.removeItem("password");
     $state.go('login');
   }

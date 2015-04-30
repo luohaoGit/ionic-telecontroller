@@ -6,11 +6,7 @@
         border: 1px solid #666666;
     }
 
-    .target {
-        display: inline-block;
-        margin: auto;
-        text-align: center;
-        color: white;
+    .content_bg {
         background-image: url(./img/kong_bg.jpg);
     }
 
@@ -235,6 +231,7 @@
         height: 35px;
         position: absolute;
         bottom: 20px;
+        left: 50%;
     }
 
     .volumn_btn_class {
@@ -258,14 +255,26 @@
         margin-right: -40%;
         background-image: url(./img/button_13.png);
     }
+
+    .target {
+        display: inline-block;
+        margin: auto;
+        text-align: center;
+        background-image: url(./img/kong_bg.jpg);
+        position: absolute;
+        width: 100%;
+        height: 350px;
+    }
 </style>
 
 <ion-view view-title="主面板">
-  <ion-content scroll="false" class="target"
-               hm-pan = "onHammer"
-               hm-tap = "onHammer">
+  <ion-content scroll="false" class="content_bg">
 
-    <div class="pointer" ng-style="{'top': fixedY, 'left': fixedX}"></div>
+    <div class="target"
+         hm-pan = "onHammer"
+         hm-tap = "onHammer">
+        <div class="pointer" ng-style="{'top': fixedY, 'left': fixedX}"></div>
+    </div>
 
     <div class="click-bar" ng-class="{true: 'click-bar-up', false: 'click-bar-down'}[toolbarShowed]">
         <button class="leftbtn" ng-click="clickHandle(0)"></button>

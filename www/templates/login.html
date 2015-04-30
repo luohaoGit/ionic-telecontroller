@@ -162,12 +162,12 @@
               <div class="connect_content">
                   <label class="input_label">
                       <span class="input_span">IP</span>
-                      <input type="text" name="ip" autocomplete="off" ng-model="connectData.ip"
+                      <input type="text" name="ip" autocomplete="off" ng-model="settings.ip"
                              placeholder="输入IP" />
                   </label>
                   <label class="input_label">
                       <span class="input_span">端口</span>
-                      <input type="number" name="port" autocomplete="off" ng-model="connectData.port"
+                      <input type="number" name="port" autocomplete="off" ng-model="settings.port"
                              placeholder="输入端口" />
                   </label>
               </div>
@@ -176,11 +176,11 @@
                   <label class="setting_label">
                       <span class="setting_span">左手习惯鼠标</span>
                       <label class="toggle toggle-blue">
-                          <input type="checkbox" ng-model="otherData.leftHandMode">
+                          <input type="checkbox" ng-model="settings.leftHandMode">
                           <div class="track">
-                              <div class="handel_left" ng-show="otherData.leftHandMode">开</div>
+                              <div class="handel_left" ng-show="settings.leftHandMode">开</div>
                               <div class="handle"></div>
-                              <div class="handel_right" ng-show="!otherData.leftHandMode">关</div>
+                              <div class="handel_right" ng-show="!settings.leftHandMode">关</div>
                           </div>
                       </label>
                   </label>
