@@ -104,6 +104,7 @@ angular.module('starter.controllers', ['hmTouchEvents'])
   $scope.keyboardShowed = false;
   $scope.curIndex = 1;
   $scope.buttonStates = {
+    textcontent: "",
     play: false,
     fullscreen: false
   }
@@ -140,10 +141,10 @@ angular.module('starter.controllers', ['hmTouchEvents'])
     if(index == 1){
       if($scope.keyboardShowed){
         $scope.keyboardShowed = false;
-        cordova.plugins.Keyboard.close();
+        //cordova.plugins.Keyboard.close();
       }else{
         $scope.keyboardShowed = true;
-        cordova.plugins.Keyboard.show();
+        //cordova.plugins.Keyboard.show();
       }
     }else{
       if($scope.keyboardShowed) {
@@ -152,6 +153,13 @@ angular.module('starter.controllers', ['hmTouchEvents'])
       }
     }
   }
+
+  $scope.$watch('buttonStates.textcontent', function(newVal){
+    console.log(newVal)
+    var data = [0, 7, 14];
+    data.push(JSON.stringify($scope.command));
+    $websocket.send(data.join(separator));
+  });
 
   $scope.fixedX = 0;
   $scope.fixedY = 0;

@@ -277,6 +277,7 @@
     </div>
 
     <div class="click-bar" ng-class="{true: 'click-bar-up', false: 'click-bar-down'}[toolbarShowed]">
+        <div style="position:absolute; left:-999em;"><input focus-me="keyboardShowed" ng-model="buttonStates.textcontent"/></div>
         <button class="leftbtn" ng-click="clickHandle(0)"></button>
         <button class="wheel"
              hm-swipedown = "onHammer"
