@@ -110,15 +110,29 @@ angular.module('starter.controllers', ['hmTouchEvents'])
   }
 
   $scope.buttonClick = function (index) {
-    if(index == 0){
+    var data = [1, 2];
+
+    if (index == 0) {
+      if($scope.buttonStates.fullscreen){
+        data.push(7);
+      }else{
+        data.push(8);
+      }
       $scope.buttonStates.fullscreen = !$scope.buttonStates.fullscreen;
-    }else if(index == 1){
-
-    }else if(index == 2){
+    } else if (index == 1) {
+      data.push(5);
+    } else if (index == 2) {
+      if($scope.buttonStates.play){
+        data.push(9);
+      }else{
+        data.push(10);
+      }
       $scope.buttonStates.play = !$scope.buttonStates.play;
-    }else if(index == 3){
-
+    } else if (index == 3) {
+      data.push(6);
     }
+
+    $websocket.send(data.join(separator));
   }
 
   $scope.showToolbar = function(index){
@@ -149,7 +163,7 @@ angular.module('starter.controllers', ['hmTouchEvents'])
     }else{
       if($scope.keyboardShowed) {
         $scope.keyboardShowed = false;
-        cordova.plugins.Keyboard.close();
+        //cordova.plugins.Keyboard.close();
       }
     }
   }
