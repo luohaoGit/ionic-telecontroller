@@ -17,10 +17,6 @@ angular.module('starter.directives', ['ngSanitize'])
 						});
 					}
 				});
-
-				element.bind('blur', function() {
-					scope.$apply(model.assign(scope, false));
-				});
 			}
 		};
 	});
