@@ -7,7 +7,7 @@ angular.module('starter.controllers', ['hmTouchEvents'])
 
 })
 
-.controller('LoginCtrl', function($scope, LoginService, $state, $ionicPopup, $ionicLoading, $websocket, $rootScope) {
+.controller('LoginCtrl', function($scope, LoginService, $state, $ionicPopup, $ionicLoading, $websocket, $rootScope, $timeout) {
 
   $scope.loginData = {
     username: localStorage.username,
@@ -44,11 +44,28 @@ angular.module('starter.controllers', ['hmTouchEvents'])
       template: '正在连接...'
     });
 
+    $scope.ionicLoading = true;
+
+    $timeout(function(){
+      if($scope.ionicLoading) {
+        $scope.ionicLoading = false;
+        $ionicLoading.hide();
+        $ionicPopup.alert({
+          title: '温馨提示',
+          template: '连接超时！',
+          okText: '知道了'
+        }).then(function (res) {
+          $ionicLoading.hide();
+        });
+      }
+    }, 20 * 1000);
+
     localStorage.ip = $rootScope.settings.ip;
     localStorage.port = $rootScope.settings.port;
 
     $websocket.open($rootScope.settings.ip, $rootScope.settings.port).then(function(){
       $ionicLoading.hide();
+      $scope.ionicLoading = false;
 
       if($scope.otherData.showLogin){//需要登录
 
@@ -83,13 +100,16 @@ angular.module('starter.controllers', ['hmTouchEvents'])
 
     }, function(){
       $ionicLoading.hide();
-      $ionicPopup.alert({
-        title: '温馨提示',
-        template: '连接失败！',
-        okText: '知道了'
-      }).then(function(res){
-        $ionicLoading.hide();
-      });
+      if($scope.ionicLoading) {
+        $scope.ionicLoading = false;
+        $ionicPopup.alert({
+          title: '温馨提示',
+          template: '连接失败！',
+          okText: '知道了'
+        }).then(function (res) {
+          $ionicLoading.hide();
+        });
+      }
     });
   }
 })
@@ -169,10 +189,14 @@ angular.module('starter.controllers', ['hmTouchEvents'])
   }
 
   $scope.$watch('buttonStates.textcontent', function(newVal){
-    console.log(newVal)
-    var data = [0, 7, 14];
-    data.push(JSON.stringify($scope.command));
-    $websocket.send(data.join(separator));
+    if(newVal.length > 0) {
+      var obj = {
+        text: newVal
+      }
+      var data = [0, 2, 16];
+      data.push(JSON.stringify(obj));
+      //$websocket.send(data.join(separator));
+    }
   });
 
   $scope.fixedX = 0;
