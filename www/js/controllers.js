@@ -22,6 +22,39 @@ angular.module('starter.controllers', ['hmTouchEvents'])
     localStorage.leftHandMode = newVal;
   });
 
+  $scope.connect = function(){
+    $ionicLoading.show({
+     template: '正在连接...'
+    });
+
+    chrome.sockets.tcp.create(function(createInfo) {
+      chrome.sockets.tcp.connect(createInfo.socketId, localStorage.ip, localStorage.port,
+          function(result) {
+            $ionicLoading.hide();
+            if (result === 0) {
+              console.log('connect: success');
+              $rootScope.soid = createInfo.socketId;
+              $state.go('app.main');
+            }else{
+              $ionicPopup.alert({
+                title: '温馨提示',
+                template: '连接失败！',
+                okText: '知道了'
+              });
+            }
+          },
+          function(error){
+            $ionicLoading.hide();
+            $ionicPopup.alert({
+              title: '温馨提示',
+              template: '连接失败！',
+              okText: '知道了'
+            });
+          }
+      );
+    });
+  }
+
   $scope.connectAndLogin = function(){
 
     if(!/^(\d+)\.(\d+)\.(\d+)\.(\d+)$/.test($rootScope.settings.ip)){
@@ -40,82 +73,43 @@ angular.module('starter.controllers', ['hmTouchEvents'])
       return;
     }
 
-    $ionicLoading.show({
-      template: '正在连接...'
-    });
-
-    $scope.ionicLoading = true;
-
-    $timeout(function(){
-      if($scope.ionicLoading) {
-        $scope.ionicLoading = false;
-        $ionicLoading.hide();
-        $ionicPopup.alert({
-          title: '温馨提示',
-          template: '连接超时！',
-          okText: '知道了'
-        }).then(function (res) {
-          $ionicLoading.hide();
-        });
-      }
-    }, 20 * 1000);
-
     localStorage.ip = $rootScope.settings.ip;
     localStorage.port = $rootScope.settings.port;
 
-    $websocket.open($rootScope.settings.ip, $rootScope.settings.port).then(function(){
-      $ionicLoading.hide();
-      $scope.ionicLoading = false;
+    if($scope.otherData.showLogin){//需要登录
 
-      if($scope.otherData.showLogin){//需要登录
+      $ionicLoading.show({
+        template: '正在登录...'
+      });
 
-        $ionicLoading.show({
-          template: '正在登录...'
-        });
-
-        if(localStorage.token && localStorage.username == $scope.loginData.username){//已经登陆过就不用再登录
-          $ionicLoading.hide();
-          $state.go('app.main');
-        }else{
-          LoginService.login($scope.loginData.username, $scope.loginData.password).success(function (data) {
-            localStorage.username = $scope.loginData.username;
-            localStorage.password = $scope.loginData.password;
-            if(angular.isObject(data)){
-              localStorage.token = JSON.stringify(data.retMsg);
-              localStorage.userdata = JSON.stringify(data.retObj[0]);
-            }
-            $ionicLoading.hide();
-            $state.go('app.main');
-          }).error(function (data) {
-            $ionicLoading.hide();
-            var alertPopup = $ionicPopup.alert({
-              title: '登录失败',
-              template: '请检查您的用户名和密码'
-            });
-          });
-        }
+      if(localStorage.token && localStorage.username == $scope.loginData.username){//已经登陆过就不用再登录
+        $ionicLoading.hide();
+        $scope.connect();
       }else{
-        $state.go('app.main');
-      }
-
-    }, function(){
-      $ionicLoading.hide();
-      if($scope.ionicLoading) {
-        $scope.ionicLoading = false;
-        $ionicPopup.alert({
-          title: '温馨提示',
-          template: '连接失败！',
-          okText: '知道了'
-        }).then(function (res) {
+        LoginService.login($scope.loginData.username, $scope.loginData.password).success(function (data) {
+          localStorage.username = $scope.loginData.username;
+          localStorage.password = $scope.loginData.password;
+          if(angular.isObject(data)){
+            localStorage.token = JSON.stringify(data.retMsg);
+            localStorage.userdata = JSON.stringify(data.retObj[0]);
+          }
           $ionicLoading.hide();
+          $scope.connect();
+        }).error(function (data) {
+          $ionicLoading.hide();
+          $ionicPopup.alert({
+            title: '登录失败',
+            template: '请检查您的用户名和密码'
+          });
         });
       }
-    });
+    }else{
+      $scope.connect();
+    }
   }
 })
 
 .controller('MainCtrl', function($scope, $rootScope, $stateParams, $websocket, $ionicModal, $state) {
-  var separator = "===!@#";
   $scope.command = {};
   $scope.otherData = {};
   $scope.deltaX = 0;
@@ -129,8 +123,35 @@ angular.module('starter.controllers', ['hmTouchEvents'])
     fullscreen: false
   }
 
+  $scope.send = function(array){
+    var uint8 = new Uint8Array(array);
+    chrome.sockets.tcp.send($rootScope.soid, uint8.buffer, function(result) {
+      if (result.resultCode === 0) {
+        console.log('connectAndSend: success');
+      }
+    });
+  }
+
+  $scope.stringToBytes = function(str) {
+    var ch, st, re = [];
+    for (var i = 0; i < str.length; i++ ) {
+      ch = str.charCodeAt(i);  // get char
+      st = [];                 // set up "stack"
+      do {
+        st.push( ch & 0xFF );  // push byte to stack
+        ch = ch >> 8;          // shift value down by 1 byte
+      }
+      while ( ch );
+      // add stack contents to result
+      // done because chars have "wrong" endianness
+      re = re.concat( st.reverse() );
+    }
+    // return an array of bytes
+    return re;
+  }
+
   $scope.buttonClick = function (index) {
-    var data = [1, 2];
+    var data = [2];
 
     if (index == 0) {
       if($scope.buttonStates.fullscreen){
@@ -152,7 +173,7 @@ angular.module('starter.controllers', ['hmTouchEvents'])
       data.push(6);
     }
 
-    $websocket.send(data.join(separator));
+    $scope.send(data);
   }
 
   $scope.showToolbar = function(index){
@@ -193,9 +214,9 @@ angular.module('starter.controllers', ['hmTouchEvents'])
       var obj = {
         text: newVal
       }
-      var data = [0, 2, 16];
-      data.push(JSON.stringify(obj));
-      //$websocket.send(data.join(separator));
+      var data = [2, 16];
+      data = data.concat($scope.stringToBytes(JSON.stringify(obj)));
+
     }
   });
 
@@ -204,12 +225,7 @@ angular.module('starter.controllers', ['hmTouchEvents'])
 
   $scope.onHammer = function(event) {
     var type = event.type;
-    var data = [];
-
-    if(event.srcEvent.touches[0] && event.srcEvent.touches[0].pageX){
-      $scope.fixedX = event.srcEvent.touches[0].pageX + "px";
-      $scope.fixedY = event.srcEvent.touches[0].pageY + "px";
-    }
+    var data = [2];
 
     if(type == 'pan') {
       $scope.command = {beginY:0, beginX:0};
@@ -221,17 +237,18 @@ angular.module('starter.controllers', ['hmTouchEvents'])
         $scope.deltaX = 0;
         $scope.deltaY = 0;
       }
-      data = data.concat(0, 2, 2); //0代表调用方法类型，2代表模拟键值指令
-      data.push(JSON.stringify($scope.command));
+      data.push(2); //0代表调用方法类型，2代表模拟键值指令
+      data = data.concat($scope.stringToBytes(JSON.stringify($scope.command)));
+      console.log($scope.command)
     }else if(type == 'tap'){
-      data = data.concat(1, 2, 3);
+      data.push(3);
     }else if(type == 'swipeup'){
-      data = data.concat(1, 2, 17);
+      data.push(17);
     }else if(type == 'swipedown'){
-      data = data.concat(1, 2, 18);
+      data.push(18);
     }
 
-    $websocket.send(data.join(separator));
+    $scope.send(data);
   };
 
   $scope.clickHandle = function(type) {
@@ -244,14 +261,11 @@ angular.module('starter.controllers', ['hmTouchEvents'])
     }
 
     if(type == 0){
-      data = data.concat(1, 2, leftCmd);
+      data = data.concat(2, leftCmd);
     }else if(type == 1){
-      data = data.concat(1, 2, rightCmd);
-    }else if(type == 2){
-      console.log($scope.otherData.contentToSend)
-      $scope.otherData.contentToSend = '';
+      data = data.concat(2, rightCmd);
     }
-    $websocket.send(data.join(separator));
+    $scope.send(data);
   }
 
 
@@ -285,6 +299,8 @@ angular.module('starter.controllers', ['hmTouchEvents'])
   }
 
   $scope.exit = function(){
+    chrome.sockets.tcp.disconnect($rootScope.soid);
+    chrome.sockets.tcp.close($rootScope.soid);
     ionic.Platform.exitApp();
   }
 

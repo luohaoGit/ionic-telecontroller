@@ -5,7 +5,6 @@
     "ionic": "driftyco/ionic-bower#1.0.0-rc.2"
   },
   "dependencies": {
-    "ryanmullins-angular-hammer": "~2.1.10",
-    "angular-websocket": "~1.0.9"
+    "ryanmullins-angular-hammer": "~2.1.10"
   }
 }
