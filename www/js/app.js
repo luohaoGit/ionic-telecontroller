@@ -4,6 +4,18 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
+
+/**
+ * localStorage.ip
+ * localStorage.port
+ * localStorage.username
+ * localStorage.password
+ * localStorage.token
+ * localStorage.userdata
+ * localStorage.teacherClassInfo
+ * localStorage.leftHandMode
+ * localStorage.sensitivity
+ */
 angular.module('starter', ['ionic', 'starter.services', 'starter.controllers', 'starter.directives'])
 
 .run(function($ionicPlatform, $rootScope, $location, $ionicHistory) {

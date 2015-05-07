@@ -41,6 +41,148 @@ angular.module('starter.services', [])
         }
     })
 
+    .service('UserService', function($q, $http) {
+        return {
+            getClassInfo: function() {
+                var deferred = $q.defer();
+                var promise = deferred.promise;
+                var userdata = JSON.parse(localStorage.userdata);
+                var infoUrl = "http://plesson.zxyq.com.cn/api.php";
+                var relativeUrl = "/home/user/teacherInformation.html";
+                var reqContent = "?userid=" + localStorage.username + "&token=" + localStorage.token
+                                + "&teachertimestamp=0" + "&areaid=" + userdata.areaid + "&schid=" + userdata.schid;
+
+                $http.post(infoUrl + relativeUrl + reqContent)
+                    .success(function(res){
+                        if(res.status == 0){
+                            deferred.resolve(res);
+                        }else{
+                            deferred.reject();
+                        }
+                    }).error(function(data) {
+                        deferred.reject();
+                    });
+
+                promise.success = function(fn) {
+                    promise.then(fn);
+                    return promise;
+                }
+                promise.error = function(fn) {
+                    promise.then(null, fn);
+                    return promise;
+                }
+                return promise;
+            }
+        }
+    })
+
+
+    .service('CommonService', function($q) {
+        return {
+            toUTF8Array: function(str) {
+                var utf8 = [];
+                for (var i=0; i < str.length; i++) {
+                    var charcode = str.charCodeAt(i);
+                    if (charcode < 0x80) utf8.push(charcode);
+                    else if (charcode < 0x800) {
+                        utf8.push(0xc0 | (charcode >> 6),
+                            0x80 | (charcode & 0x3f));
+                    }
+                    else if (charcode < 0xd800 || charcode >= 0xe000) {
+                        utf8.push(0xe0 | (charcode >> 12),
+                            0x80 | ((charcode>>6) & 0x3f),
+                            0x80 | (charcode & 0x3f));
+                    }
+                    // surrogate pair
+                    else {
+                        i++;
+                        // UTF-16 encodes 0x10000-0x10FFFF by
+                        // subtracting 0x10000 and splitting the
+                        // 20 bits of 0x0-0xFFFFF into two halves
+                        charcode = 0x10000 + (((charcode & 0x3ff)<<10)
+                        | (str.charCodeAt(i) & 0x3ff))
+                        utf8.push(0xf0 | (charcode >>18),
+                            0x80 | ((charcode>>12) & 0x3f),
+                            0x80 | ((charcode>>6) & 0x3f),
+                            0x80 | (charcode & 0x3f));
+                    }
+                }
+                return utf8;
+            },
+
+            stringToBytes: function(str) {
+                var ch, st, re = [];
+                for (var i = 0; i < str.length; i++ ) {
+                    ch = str.charCodeAt(i);  // get char
+                    st = [];                 // set up "stack"
+                    do {
+                        st.push( ch & 0xFF );  // push byte to stack
+                        ch = ch >> 8;          // shift value down by 1 byte
+                    }
+                    while ( ch );
+                    // add stack contents to result
+                    // done because chars have "wrong" endianness
+                    re = re.concat( st.reverse() );
+                }
+                // return an array of bytes
+                return re;
+            },
+
+            send: function(array, soid){
+                var uint8 = new Uint8Array(array);
+                chrome.sockets.tcp.send(soid, uint8.buffer, function(result) {
+                    if (result.resultCode === 0) {
+                        console.log('connectAndSend: success');
+                    }
+                });
+            },
+
+            createAndConnect: function(ip, port) {
+                var deferred = $q.defer();
+                var promise = deferred.promise;
+
+                chrome.sockets.tcp.create(function(createInfo) {
+                    chrome.sockets.tcp.connect(createInfo.socketId, ip, port,
+                        function(result) {
+                            if (result === 0) {
+                                deferred.resolve(createInfo.socketId);
+                            }else{
+                                deferred.reject();
+                            }
+                        },
+                        function(error){
+                            deferred.reject();
+                        }
+                    );
+                });
+
+                promise.success = function(fn) {
+                    promise.then(fn);
+                    return promise;
+                }
+                promise.error = function(fn) {
+                    promise.then(null, fn);
+                    return promise;
+                }
+                return promise;
+            }
+        }
+    })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     .factory('$websocket', function ($q) {
 
         var sid, host, port;

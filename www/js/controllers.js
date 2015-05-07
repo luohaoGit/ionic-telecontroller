@@ -7,7 +7,7 @@ angular.module('starter.controllers', ['hmTouchEvents'])
 
 })
 
-.controller('LoginCtrl', function($scope, LoginService, $state, $ionicPopup, $ionicLoading, $websocket, $rootScope, $timeout) {
+.controller('LoginCtrl', function($scope, LoginService, UserService, CommonService, $state, $ionicPopup, $ionicLoading, $websocket, $rootScope, $timeout) {
 
   $scope.loginData = {
     username: localStorage.username,
@@ -15,7 +15,7 @@ angular.module('starter.controllers', ['hmTouchEvents'])
   };
 
   $scope.otherData = {
-    showLogin: false
+    showLogin: true
   }
 
   $scope.$watch('settings.leftHandMode', function(newVal){
@@ -27,31 +27,17 @@ angular.module('starter.controllers', ['hmTouchEvents'])
      template: '正在连接...'
     });
 
-    chrome.sockets.tcp.create(function(createInfo) {
-      chrome.sockets.tcp.connect(createInfo.socketId, localStorage.ip, localStorage.port,
-          function(result) {
-            $ionicLoading.hide();
-            if (result === 0) {
-              console.log('connect: success');
-              $rootScope.soid = createInfo.socketId;
-              $state.go('app.main');
-            }else{
-              $ionicPopup.alert({
-                title: '温馨提示',
-                template: '连接失败！',
-                okText: '知道了'
-              });
-            }
-          },
-          function(error){
-            $ionicLoading.hide();
-            $ionicPopup.alert({
-              title: '温馨提示',
-              template: '连接失败！',
-              okText: '知道了'
-            });
-          }
-      );
+    CommonService.createAndConnect(localStorage.ip, localStorage.port).success(function(soid){
+      $ionicLoading.hide();
+      $rootScope.soid = soid;
+      $state.go('app.main');
+    }).error(function(){
+      $ionicLoading.hide();
+      $ionicPopup.alert({
+        title: '温馨提示',
+        template: '连接失败！',
+        okText: '知道了'
+      });
     });
   }
 
@@ -82,7 +68,8 @@ angular.module('starter.controllers', ['hmTouchEvents'])
         template: '正在登录...'
       });
 
-      if(localStorage.token && localStorage.username == $scope.loginData.username){//已经登陆过就不用再登录
+      if(localStorage.token && localStorage.teacherClassInfo
+          && localStorage.username == $scope.loginData.username){//已经登陆过就不用再登录
         $ionicLoading.hide();
         $scope.connect();
       }else{
@@ -90,8 +77,34 @@ angular.module('starter.controllers', ['hmTouchEvents'])
           localStorage.username = $scope.loginData.username;
           localStorage.password = $scope.loginData.password;
           if(angular.isObject(data)){
-            localStorage.token = JSON.stringify(data.retMsg);
+            localStorage.token = data.retMsg;
             localStorage.userdata = JSON.stringify(data.retObj[0]);
+            UserService.getClassInfo().success(function(classInfo){
+              var tea = classInfo.data;
+
+              var teaClasses = tea.handinclass;
+              var handinclass = [];
+              for(var i=0; i<teaClasses.length; i++){
+                var c = teaClasses[i];
+                var clazz = {
+                  subjectId: c.subjectid,
+                  subjectName: c.subjectname,
+                  classId: c.classid,
+                  className: c.classname
+                }
+                handinclass.push(clazz);
+              }
+
+              var teacherClassInfo = {
+                userId: tea.username,
+                userName: tea.truename,
+                handinclass: handinclass
+              }
+
+              localStorage.teacherClassInfo = JSON.stringify(teacherClassInfo);
+            }).error(function(err){
+              console.log(err)
+            });
           }
           $ionicLoading.hide();
           $scope.connect();
@@ -109,7 +122,7 @@ angular.module('starter.controllers', ['hmTouchEvents'])
   }
 })
 
-.controller('MainCtrl', function($scope, $rootScope, $stateParams, $websocket, $ionicModal, $state) {
+.controller('MainCtrl', function($scope, $rootScope, $stateParams, $websocket, $ionicModal, $state, CommonService) {
   $scope.command = {};
   $scope.otherData = {};
   $scope.deltaX = 0;
@@ -121,33 +134,6 @@ angular.module('starter.controllers', ['hmTouchEvents'])
     textcontent: "",
     play: false,
     fullscreen: false
-  }
-
-  $scope.send = function(array){
-    var uint8 = new Uint8Array(array);
-    chrome.sockets.tcp.send($rootScope.soid, uint8.buffer, function(result) {
-      if (result.resultCode === 0) {
-        console.log('connectAndSend: success');
-      }
-    });
-  }
-
-  $scope.stringToBytes = function(str) {
-    var ch, st, re = [];
-    for (var i = 0; i < str.length; i++ ) {
-      ch = str.charCodeAt(i);  // get char
-      st = [];                 // set up "stack"
-      do {
-        st.push( ch & 0xFF );  // push byte to stack
-        ch = ch >> 8;          // shift value down by 1 byte
-      }
-      while ( ch );
-      // add stack contents to result
-      // done because chars have "wrong" endianness
-      re = re.concat( st.reverse() );
-    }
-    // return an array of bytes
-    return re;
   }
 
   $scope.buttonClick = function (index) {
@@ -173,7 +159,7 @@ angular.module('starter.controllers', ['hmTouchEvents'])
       data.push(6);
     }
 
-    $scope.send(data);
+    CommonService.send(data);
   }
 
   $scope.showToolbar = function(index){
@@ -209,20 +195,6 @@ angular.module('starter.controllers', ['hmTouchEvents'])
     }
   }
 
-  $scope.$watch('buttonStates.textcontent', function(newVal){
-    if(newVal.length > 0) {
-      var obj = {
-        text: newVal
-      }
-      var data = [2, 16];
-      data = data.concat($scope.stringToBytes(JSON.stringify(obj)));
-
-    }
-  });
-
-  $scope.fixedX = 0;
-  $scope.fixedY = 0;
-
   $scope.onHammer = function(event) {
     var type = event.type;
     var data = [2];
@@ -238,18 +210,28 @@ angular.module('starter.controllers', ['hmTouchEvents'])
         $scope.deltaY = 0;
       }
       data.push(2); //0代表调用方法类型，2代表模拟键值指令
-      data = data.concat($scope.stringToBytes(JSON.stringify($scope.command)));
+      data = data.concat(CommonService.stringToBytes(JSON.stringify($scope.command)));
       console.log($scope.command)
     }else if(type == 'tap'){
       data.push(3);
-    }else if(type == 'swipeup'){
-      data.push(17);
-    }else if(type == 'swipedown'){
-      data.push(18);
     }
 
-    $scope.send(data);
+    CommonService.send(data);
   };
+
+  $scope.onSwipe = function(event) {
+    var type = event.type;
+    var data = [2];
+
+    if(event.isFinal) {
+      if (type == 'panup') {
+        data.push(17);
+      } else if (type == 'pandown') {
+        data.push(18);
+      }
+      CommonService.send(data);
+    }
+  }
 
   $scope.clickHandle = function(type) {
     var data = [];
@@ -265,9 +247,25 @@ angular.module('starter.controllers', ['hmTouchEvents'])
     }else if(type == 1){
       data = data.concat(2, rightCmd);
     }
-    $scope.send(data);
+    CommonService.send(data);
   }
 
+  $scope.$watch('buttonStates.textcontent', function(newVal){
+    if(newVal.length > 0) {
+      var obj = {
+        text: newVal
+      }
+      var data = [2, 16];
+      data = data.concat(CommonService.stringToBytes(JSON.stringify(obj)));
+
+    }
+  });
+
+  $scope.$on("$ionicView.enter", function(){
+    var data = [99, 201];
+    data = data.concat(CommonService.toUTF8Array(localStorage.teacherClassInfo));
+    CommonService.send(data, $rootScope.soid);
+  });
 
   // Create the login modal that we will use later
   $ionicModal.fromTemplateUrl('templates/settings.html', {
