@@ -14,13 +14,64 @@ angular.module('starter.controllers', ['hmTouchEvents'])
     password: localStorage.password
   };
 
-  $scope.otherData = {
-    showLogin: true
-  }
-
   $scope.$watch('settings.leftHandMode', function(newVal){
     localStorage.leftHandMode = newVal;
   });
+
+  $scope.loginFailed = function(){
+    $ionicLoading.hide();
+    $ionicPopup.alert({
+      title: '登录失败',
+      template: '请检查您的用户名和密码'
+    });
+  }
+
+  $scope.classes = [];
+  $scope.choice = "";
+  $scope.itemChange = function(classid){
+    for(var i=0; i<$scope.classes.length; i++){
+      if($scope.classes[i].classId == classid){
+        $scope.classes[i].checked = true;
+      }else{
+        $scope.classes[i].checked = false;
+      }
+    }
+  };
+  $scope.selectClass = function(classArray) {
+    $ionicLoading.hide();
+    $scope.classes = classArray;
+    var myPopup = $ionicPopup.show({
+      template: '<div class="list">\
+      <ion-checkbox ng-repeat="item in classes"\
+      ng-model="item.checked"\
+      ng-checked="item.checked"\
+      ng-value="item.classId"\
+      ng-change="itemChange(item.classId)">\
+      {{ item.className }}\
+      </ion-check></div>',
+      title: '选择班级',
+      subTitle: '请选择上课班级',
+      scope: $scope,
+      buttons: [
+        {
+          text: '<b>确定</b>',
+          type: 'button-positive',
+          onTap: function(e) {
+            e.preventDefault();
+            for(var i=0; i<$scope.classes.length; i++){
+              if($scope.classes[i].checked){
+                $rootScope.selectedClass = $scope.classes[i];
+                break;
+              }
+            }
+
+            $scope.connect();
+            myPopup.close();
+          }
+        }
+      ]
+    });
+  };
 
   $scope.connect = function(){
     $ionicLoading.show({
@@ -62,7 +113,7 @@ angular.module('starter.controllers', ['hmTouchEvents'])
     localStorage.ip = $rootScope.settings.ip;
     localStorage.port = $rootScope.settings.port;
 
-    if($scope.otherData.showLogin){//需要登录
+    if($rootScope.settings.showLogin){//需要登录
 
       $ionicLoading.show({
         template: '正在登录...'
@@ -70,8 +121,15 @@ angular.module('starter.controllers', ['hmTouchEvents'])
 
       if(localStorage.token && localStorage.teacherClassInfo
           && localStorage.username == $scope.loginData.username){//已经登陆过就不用再登录
-        $ionicLoading.hide();
-        $scope.connect();
+
+        var teacherClassInfo = JSON.parse(localStorage.teacherClassInfo);
+        var handinclass =  teacherClassInfo.handinclass;
+        if(handinclass.length > 1) {
+          $scope.selectClass(handinclass);
+        }else{
+          $ionicLoading.hide();
+          $scope.connect();
+        }
       }else{
         LoginService.login($scope.loginData.username, $scope.loginData.password).success(function (data) {
           localStorage.username = $scope.loginData.username;
@@ -90,7 +148,8 @@ angular.module('starter.controllers', ['hmTouchEvents'])
                   subjectId: c.subjectid,
                   subjectName: c.subjectname,
                   classId: c.classid,
-                  className: c.classname
+                  className: c.classname,
+                  checked: i == 0 ? true : false
                 }
                 handinclass.push(clazz);
               }
@@ -102,18 +161,19 @@ angular.module('starter.controllers', ['hmTouchEvents'])
               }
 
               localStorage.teacherClassInfo = JSON.stringify(teacherClassInfo);
+
+              if(handinclass.length > 1) {
+                $scope.selectClass(handinclass);
+              }else{
+                $ionicLoading.hide();
+                $scope.connect();
+              }
             }).error(function(err){
-              console.log(err)
+              $scope.loginFailed();
             });
           }
-          $ionicLoading.hide();
-          $scope.connect();
         }).error(function (data) {
-          $ionicLoading.hide();
-          $ionicPopup.alert({
-            title: '登录失败',
-            template: '请检查您的用户名和密码'
-          });
+          $scope.loginFailed();
         });
       }
     }else{
@@ -262,9 +322,15 @@ angular.module('starter.controllers', ['hmTouchEvents'])
   });
 
   $scope.$on("$ionicView.enter", function(){
-    var data = [99, 201];
-    data = data.concat(CommonService.toUTF8Array(localStorage.teacherClassInfo));
-    CommonService.send(data, $rootScope.soid);
+    if($rootScope.settings.showLogin) {
+      var data = [99, 201];
+      var teacherClassInfo = JSON.parse(localStorage.teacherClassInfo);
+      if(teacherClassInfo.handinclass.length > 1){
+        teacherClassInfo.handinclass = $rootScope.selectedClass;
+      }
+      data = data.concat(CommonService.toUTF8Array(JSON.stringify(teacherClassInfo)));
+      CommonService.send(data, $rootScope.soid);
+    }
   });
 
   // Create the login modal that we will use later

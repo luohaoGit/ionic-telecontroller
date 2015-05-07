@@ -187,29 +187,29 @@
                   <label class="setting_label">
                       <span class="setting_span">登录账号并连接</span>
                       <label class="checkbox checkbox-blue">
-                          <input type="checkbox" ng-model="otherData.showLogin">
+                          <input type="checkbox" ng-model="settings.showLogin">
                       </label>
                   </label>
               </div>
 
-              <div class="login_content" ng-show="otherData.showLogin">
+              <div class="login_content" ng-show="settings.showLogin">
                   <label class="input_label">
                       <span class="input_span user_span"></span>
                       <input type="text" name="username" required="false" maxlength="20" minlength="2"
                              autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
-                             placeholder="输入账号" ng-model="loginData.username" ng-disabled="!otherData.showLogin">
+                             placeholder="输入账号" ng-model="loginData.username" ng-disabled="!settings.showLogin">
                   </label>
                   <label class="input_label">
                       <span class="input_span pwd_span"></span>
                       <input type="password" name="pwd" required="false" placeholder="输入密码" minlength="6" maxlength="20"
                              autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
-                             ng-model="loginData.password" ng-disabled="!otherData.showLogin">
+                             ng-model="loginData.password" ng-disabled="!settings.showLogin">
                   </label>
               </div>
 
               <div class="login_buttton">
-                  <button class="button button-block button-sky" type="submit" ng-disabled="otherData.showLogin && connectAndLoginForm.$invalid">
-                      {{otherData.showLogin ? "登录账号并连接" : "确认连接"}}
+                  <button class="button button-block button-sky" type="submit" ng-disabled="settings.showLogin && connectAndLoginForm.$invalid">
+                      {{settings.showLogin ? "登录账号并连接" : "确认连接"}}
                   </button>
               </div>
 

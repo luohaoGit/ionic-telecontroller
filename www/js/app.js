@@ -32,10 +32,12 @@ angular.module('starter', ['ionic', 'starter.services', 'starter.controllers', '
     ip: localStorage.ip,
     port: localStorage.port ? parseInt(localStorage.port) : 6666,
     sensitivity: localStorage.sensitivity ? parseInt(localStorage.sensitivity) : 1,
-    leftHandMode: localStorage.leftHandMode == 'true' ? true : false
+    leftHandMode: localStorage.leftHandMode == 'true' ? true : false,
+    showLogin: true
   }
 
   $rootScope.soid = "";
+  $rootScope.selectedClass = {};
 
   $ionicPlatform.registerBackButtonAction(function(e){
     if ($location.path() == '/app/main' || $location.path() == '/app/settings' || $location.path() == '/login') {
