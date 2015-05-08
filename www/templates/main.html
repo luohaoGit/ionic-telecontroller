@@ -298,7 +298,7 @@
         <button class="toolbar-btn button_img gear"
                 ng-class="{'btn_current': curIndex==5}" ng-click="showToolbar(5)"></button>
     </ion-footer-bar>
-    <div class="row toolbar" ng-show="toolbarShowed">
+    <div class="row toolbar" ng-show="toolbarShowed && curIndex==2">
         <button class="css_btn_class button_img"
                 ng-class="{true: 'shrink', false: 'expand'}[buttonStates.fullscreen]"
                 ng-click="buttonClick(0)"></button>
@@ -307,6 +307,12 @@
                 ng-class="{true: 'pause', false: 'play'}[buttonStates.play]"
                 ng-click="buttonClick(2)"></button>
         <button class="css_btn_class button_img forward"></button>
+    </div>
+    <div class="row toolbar" ng-show="toolbarShowed && curIndex==3">
+
+    </div>
+    <div class="row toolbar" ng-show="toolbarShowed && curIndex==4">
+
     </div>
     <div class="volumns" ng-show="toolbarShowed">
       <button class="volumn_btn_class volumn_down button_img"></button>

@@ -224,8 +224,9 @@ angular.module('starter.controllers', ['hmTouchEvents'])
 
   $scope.showToolbar = function(index){
     $scope.curIndex = index;
+
     if(index == 0){
-      $scope.curIndex = 1;
+      $scope.curIndex = 2;
       $scope.toolbarShowed = !$scope.toolbarShowed;
     }else if(index == 1){
       $scope.toolbarShowed = false;
@@ -237,20 +238,22 @@ angular.module('starter.controllers', ['hmTouchEvents'])
 
     }else if(index == 5){
       $scope.modal.show();
+      return;
     }
 
-    if(index == 1){
+    if(index != 0 && index != 1 && !$scope.toolbarShowed){
+      $scope.toolbarShowed = true;
+    }
+
+    if($scope.curIndex == 1){
       if($scope.keyboardShowed){
         $scope.keyboardShowed = false;
-        //cordova.plugins.Keyboard.close();
       }else{
         $scope.keyboardShowed = true;
-        //cordova.plugins.Keyboard.show();
       }
     }else{
       if($scope.keyboardShowed) {
         $scope.keyboardShowed = false;
-        //cordova.plugins.Keyboard.close();
       }
     }
   }
