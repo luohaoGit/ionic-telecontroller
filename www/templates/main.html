@@ -64,6 +64,7 @@
         width: 50px;
         height: 50px;
         margin: auto;
+        color: #FFFFFF;
     }
 
     .click-bar {
@@ -309,7 +310,12 @@
         <button class="css_btn_class button_img forward"></button>
     </div>
     <div class="row toolbar" ng-show="toolbarShowed && curIndex==3">
-
+        <button class="css_btn_class button_img" ng-click="clickHandle(4)">打开课件</button>
+        <button class="css_btn_class button_img" ng-click="clickHandle(4)">立即测试</button>
+        <button class="css_btn_class button_img" ng-click="clickHandle(4)">上一题</button>
+        <button class="css_btn_class button_img" ng-click="clickHandle(4)">下一题</button>
+        <button class="css_btn_class button_img" ng-click="clickHandle(4)">退出</button>
+        <button class="css_btn_class button_img" ng-click="clickHandle(4)">自动答题</button>
     </div>
     <div class="row toolbar" ng-show="toolbarShowed && curIndex==4">
 

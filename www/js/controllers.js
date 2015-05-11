@@ -37,6 +37,16 @@ angular.module('starter.controllers', ['hmTouchEvents'])
       }
     }
   };
+
+  $scope.showClass = function(handinclass){
+    if(handinclass.length > 1) {
+      $scope.selectClass(handinclass);
+    }else{
+      $ionicLoading.hide();
+      $scope.connect();
+    }
+  }
+
   $scope.selectClass = function(classArray) {
     $ionicLoading.hide();
     $scope.classes = classArray;
@@ -124,12 +134,7 @@ angular.module('starter.controllers', ['hmTouchEvents'])
 
         var teacherClassInfo = JSON.parse(localStorage.teacherClassInfo);
         var handinclass =  teacherClassInfo.handinclass;
-        if(handinclass.length > 1) {
-          $scope.selectClass(handinclass);
-        }else{
-          $ionicLoading.hide();
-          $scope.connect();
-        }
+        $scope.showClass(handinclass);
       }else{
         LoginService.login($scope.loginData.username, $scope.loginData.password).success(function (data) {
           localStorage.username = $scope.loginData.username;
@@ -137,7 +142,7 @@ angular.module('starter.controllers', ['hmTouchEvents'])
           if(angular.isObject(data)){
             localStorage.token = data.retMsg;
             localStorage.userdata = JSON.stringify(data.retObj[0]);
-            UserService.getClassInfo().success(function(classInfo){
+            serService.getClassInfo().success(function(classInfo){
               var tea = classInfo.data;
 
               var teaClasses = tea.handinclass;
@@ -162,12 +167,7 @@ angular.module('starter.controllers', ['hmTouchEvents'])
 
               localStorage.teacherClassInfo = JSON.stringify(teacherClassInfo);
 
-              if(handinclass.length > 1) {
-                $scope.selectClass(handinclass);
-              }else{
-                $ionicLoading.hide();
-                $scope.connect();
-              }
+              $scope.showClass(handinclass);
             }).error(function(err){
               $scope.loginFailed();
             });
@@ -197,29 +197,35 @@ angular.module('starter.controllers', ['hmTouchEvents'])
   }
 
   $scope.buttonClick = function (index) {
-    var data = [2];
 
-    if (index == 0) {
-      if($scope.buttonStates.fullscreen){
-        data.push(7);
-      }else{
-        data.push(8);
+    if($scope.curIndex == 3){
+      var data = [99, 202, index];
+      CommonService.send(data, $rootScope.soid);
+    }else if($scope.curIndex == 2) {
+      var data = [2];
+
+      if (index == 0) {
+        if ($scope.buttonStates.fullscreen) {
+          data.push(7);
+        } else {
+          data.push(8);
+        }
+        $scope.buttonStates.fullscreen = !$scope.buttonStates.fullscreen;
+      } else if (index == 1) {
+        data.push(5);
+      } else if (index == 2) {
+        if ($scope.buttonStates.play) {
+          data.push(9);
+        } else {
+          data.push(10);
+        }
+        $scope.buttonStates.play = !$scope.buttonStates.play;
+      } else if (index == 3) {
+        data.push(6);
       }
-      $scope.buttonStates.fullscreen = !$scope.buttonStates.fullscreen;
-    } else if (index == 1) {
-      data.push(5);
-    } else if (index == 2) {
-      if($scope.buttonStates.play){
-        data.push(9);
-      }else{
-        data.push(10);
-      }
-      $scope.buttonStates.play = !$scope.buttonStates.play;
-    } else if (index == 3) {
-      data.push(6);
+      CommonService.send(data, $rootScope.soid);
     }
 
-    CommonService.send(data);
   }
 
   $scope.showToolbar = function(index){
@@ -274,12 +280,11 @@ angular.module('starter.controllers', ['hmTouchEvents'])
       }
       data.push(2); //0代表调用方法类型，2代表模拟键值指令
       data = data.concat(CommonService.stringToBytes(JSON.stringify($scope.command)));
-      console.log($scope.command)
     }else if(type == 'tap'){
       data.push(3);
     }
 
-    CommonService.send(data);
+    CommonService.send(data, $rootScope.soid);
   };
 
   $scope.onSwipe = function(event) {
@@ -292,7 +297,7 @@ angular.module('starter.controllers', ['hmTouchEvents'])
       } else if (type == 'pandown') {
         data.push(18);
       }
-      CommonService.send(data);
+      CommonService.send(data, $rootScope.soid);
     }
   }
 
@@ -310,7 +315,7 @@ angular.module('starter.controllers', ['hmTouchEvents'])
     }else if(type == 1){
       data = data.concat(2, rightCmd);
     }
-    CommonService.send(data);
+    CommonService.send(data, $rootScope.soid);
   }
 
   $scope.$watch('buttonStates.textcontent', function(newVal){
