@@ -142,7 +142,7 @@ angular.module('starter.controllers', ['hmTouchEvents'])
           if(angular.isObject(data)){
             localStorage.token = data.retMsg;
             localStorage.userdata = JSON.stringify(data.retObj[0]);
-            serService.getClassInfo().success(function(classInfo){
+            UserService.getClassInfo().success(function(classInfo){
               var tea = classInfo.data;
 
               var teaClasses = tea.handinclass;
@@ -166,7 +166,6 @@ angular.module('starter.controllers', ['hmTouchEvents'])
               }
 
               localStorage.teacherClassInfo = JSON.stringify(teacherClassInfo);
-
               $scope.showClass(handinclass);
             }).error(function(err){
               $scope.loginFailed();
@@ -197,7 +196,6 @@ angular.module('starter.controllers', ['hmTouchEvents'])
   }
 
   $scope.buttonClick = function (index) {
-
     if($scope.curIndex == 3){
       var data = [99, 202, index];
       CommonService.send(data, $rootScope.soid);

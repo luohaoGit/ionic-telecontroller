@@ -303,24 +303,24 @@
         <button class="css_btn_class button_img"
                 ng-class="{true: 'shrink', false: 'expand'}[buttonStates.fullscreen]"
                 ng-click="buttonClick(0)"></button>
-        <button class="css_btn_class button_img backward"></button>
+        <button class="css_btn_class button_img backward" ng-click="buttonClick(1)"></button>
         <button class="css_btn_class button_img"
                 ng-class="{true: 'pause', false: 'play'}[buttonStates.play]"
                 ng-click="buttonClick(2)"></button>
-        <button class="css_btn_class button_img forward"></button>
+        <button class="css_btn_class button_img forward" ng-click="buttonClick(3)"></button>
     </div>
     <div class="row toolbar" ng-show="toolbarShowed && curIndex==3">
-        <button class="css_btn_class button_img" ng-click="clickHandle(4)">打开课件</button>
-        <button class="css_btn_class button_img" ng-click="clickHandle(4)">立即测试</button>
-        <button class="css_btn_class button_img" ng-click="clickHandle(4)">上一题</button>
-        <button class="css_btn_class button_img" ng-click="clickHandle(4)">下一题</button>
-        <button class="css_btn_class button_img" ng-click="clickHandle(4)">退出</button>
-        <button class="css_btn_class button_img" ng-click="clickHandle(4)">自动答题</button>
+        <button class="css_btn_class button_img" ng-click="buttonClick(0)">打开课件</button>
+        <button class="css_btn_class button_img" ng-click="buttonClick(1)">立即测试</button>
+        <button class="css_btn_class button_img" ng-click="buttonClick(5)">自动答题</button>
+        <button class="css_btn_class button_img" ng-click="buttonClick(2)">上一题</button>
+        <button class="css_btn_class button_img" ng-click="buttonClick(3)">下一题</button>
+        <button class="css_btn_class button_img" ng-click="buttonClick(4)">退出答题</button>
     </div>
     <div class="row toolbar" ng-show="toolbarShowed && curIndex==4">
 
     </div>
-    <div class="volumns" ng-show="toolbarShowed">
+    <div class="volumns" ng-show="false">
       <button class="volumn_btn_class volumn_down button_img"></button>
       <button class="volumn_btn_class volumn_up button_img"></button>
       <button class="volumn_btn_class volumn_mute button_img"></button>
