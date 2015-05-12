@@ -230,7 +230,7 @@ angular.module('starter.controllers', ['hmTouchEvents'])
     $scope.curIndex = index;
 
     if(index == 0){
-      $scope.curIndex = 2;
+      $scope.curIndex = 3;
       $scope.toolbarShowed = !$scope.toolbarShowed;
     }else if(index == 1){
       $scope.toolbarShowed = false;
@@ -242,6 +242,7 @@ angular.module('starter.controllers', ['hmTouchEvents'])
 
     }else if(index == 5){
       $scope.modal.show();
+      $scope.toolbarShowed = false
       return;
     }
 
