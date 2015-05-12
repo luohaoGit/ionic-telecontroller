@@ -25,6 +25,7 @@
         height: 100%;
         border: 0px;
         background-size: 30px 30px;
+        color: #FFFFFF;
     }
 
     .bar_foot {
@@ -290,12 +291,12 @@
                 ng-class="{'btn_current': curIndex==0}" ng-click="showToolbar(0)"></button>
         <button class="toolbar-btn button_img keyboard"
                 ng-class="{'btn_current': curIndex==1}" ng-click="showToolbar(1)"></button>
-        <button class="toolbar-btn button_img images"
-                ng-class="{'btn_current': curIndex==3}" ng-click="showToolbar(3)"></button>
+        <button class="toolbar-btn button_img"
+                ng-class="{'btn_current': curIndex==3}" ng-click="showToolbar(3)">在线测试</button>
+        <button class="toolbar-btn button_img"
+                ng-class="{'btn_current': curIndex==4}" ng-click="showToolbar(4)">立即测试</button>
         <button class="toolbar-btn button_img document"
                 ng-class="{'btn_current': curIndex==2}" ng-click="showToolbar(2)"></button>
-        <button class="toolbar-btn button_img videocam"
-                ng-class="{'btn_current': curIndex==4}" ng-click="showToolbar(4)"></button>
         <button class="toolbar-btn button_img gear"
                 ng-class="{'btn_current': curIndex==5}" ng-click="showToolbar(5)"></button>
     </ion-footer-bar>
@@ -311,14 +312,16 @@
     </div>
     <div class="row toolbar" ng-show="toolbarShowed && curIndex==3">
         <button class="css_btn_class button_img" ng-click="buttonClick(0)">打开课件</button>
-        <button class="css_btn_class button_img" ng-click="buttonClick(1)">立即测试</button>
         <button class="css_btn_class button_img" ng-click="buttonClick(5)">自动答题</button>
         <button class="css_btn_class button_img" ng-click="buttonClick(2)">上一题</button>
         <button class="css_btn_class button_img" ng-click="buttonClick(3)">下一题</button>
         <button class="css_btn_class button_img" ng-click="buttonClick(4)">退出答题</button>
     </div>
     <div class="row toolbar" ng-show="toolbarShowed && curIndex==4">
-
+        <button class="css_btn_class button_img" ng-click="buttonClick(1)">立即测试</button>
+        <button class="css_btn_class button_img" ng-click="buttonClick(6)">上一题</button>
+        <button class="css_btn_class button_img" ng-click="buttonClick(7)">下一题</button>
+        <button class="css_btn_class button_img" ng-click="buttonClick(8)">退出答题</button>
     </div>
     <div class="volumns" ng-show="false">
       <button class="volumn_btn_class volumn_down button_img"></button>

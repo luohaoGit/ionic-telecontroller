@@ -196,7 +196,7 @@ angular.module('starter.controllers', ['hmTouchEvents'])
   }
 
   $scope.buttonClick = function (index) {
-    if($scope.curIndex == 3){
+    if($scope.curIndex == 3 || $scope.curIndex == 4){
       var data = [99, 202, index];
       CommonService.send(data, $rootScope.soid);
     }else if($scope.curIndex == 2) {
