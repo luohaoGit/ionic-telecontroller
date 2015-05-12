@@ -250,19 +250,14 @@ angular.module('starter.controllers', ['hmTouchEvents'])
     }
 
     if($scope.curIndex == 1){
-      if($scope.keyboardShowed){
-        $scope.keyboardShowed = false;
-      }else{
-        $scope.keyboardShowed = true;
-      }
+      $scope.keyboardShowed = !$scope.keyboardShowed;
     }else{
-      if($scope.keyboardShowed) {
-        $scope.keyboardShowed = false;
-      }
+      $scope.keyboardShowed = false;
     }
   }
 
   $scope.onHammer = function(event) {
+    $scope.keyboardShowed = false;
     var type = event.type;
     var data = [2];
 
@@ -300,6 +295,7 @@ angular.module('starter.controllers', ['hmTouchEvents'])
   }
 
   $scope.clickHandle = function(type) {
+    $scope.keyboardShowed = false;
     var data = [];
     var leftCmd = 3, rightCmd = 4;
     if($rootScope.settings.leftHandMode){
@@ -312,18 +308,18 @@ angular.module('starter.controllers', ['hmTouchEvents'])
       data = data.concat(2, leftCmd);
     }else if(type == 1){
       data = data.concat(2, rightCmd);
+    }else if(type == 99){
+      return;
     }
     CommonService.send(data, $rootScope.soid);
   }
 
   $scope.$watch('buttonStates.textcontent', function(newVal){
     if(newVal.length > 0) {
-      var obj = {
-        text: newVal
-      }
-      var data = [2, 16];
-      data = data.concat(CommonService.stringToBytes(JSON.stringify(obj)));
-
+      CommonService.send([99, 203, 101], $rootScope.soid);
+      var data = [99, 203, 100];
+      data = data.concat(CommonService.toUTF8Array(newVal));
+      CommonService.send(data, $rootScope.soid);
     }
   });
 

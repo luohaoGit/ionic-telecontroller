@@ -264,7 +264,7 @@
         background-image: url(./img/kong_bg.jpg);
         position: absolute;
         width: 100%;
-        height: 350px;
+        height: 100%;
     }
 </style>
 
@@ -281,7 +281,7 @@
         <button class="leftbtn" ng-click="clickHandle(0)"></button>
         <button class="wheel"
              hm-panup  = "onSwipe"
-             hm-pandown = "onSwipe"></button>
+             hm-pandown = "onSwipe" ng-click="clickHandle(99)"></button>
         <button class="rightbtn" ng-click="clickHandle(1)"></button>
     </div>
 
@@ -290,10 +290,10 @@
                 ng-class="{'btn_current': curIndex==0}" ng-click="showToolbar(0)"></button>
         <button class="toolbar-btn button_img keyboard"
                 ng-class="{'btn_current': curIndex==1}" ng-click="showToolbar(1)"></button>
-        <button class="toolbar-btn button_img document"
-                ng-class="{'btn_current': curIndex==2}" ng-click="showToolbar(2)"></button>
         <button class="toolbar-btn button_img images"
                 ng-class="{'btn_current': curIndex==3}" ng-click="showToolbar(3)"></button>
+        <button class="toolbar-btn button_img document"
+                ng-class="{'btn_current': curIndex==2}" ng-click="showToolbar(2)"></button>
         <button class="toolbar-btn button_img videocam"
                 ng-class="{'btn_current': curIndex==4}" ng-click="showToolbar(4)"></button>
         <button class="toolbar-btn button_img gear"

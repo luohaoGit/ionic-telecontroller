@@ -13,6 +13,7 @@ angular.module('starter.directives', ['ngSanitize'])
 						});
 					}else{
 						$timeout(function() {
+							element[0].value = "";
 							element[0].blur();
 						});
 					}
