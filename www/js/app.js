@@ -19,14 +19,6 @@
 angular.module('starter', ['ionic', 'starter.services', 'starter.controllers', 'starter.directives'])
 
 .run(function($ionicPlatform, $rootScope, $location, $ionicHistory) {
-  if(typeof(datagram) != 'undefined') {
-    var PORT = 8003;
-    var udp = datagram.createSocket("udp4");
-    udp.on("message", function (msg, ext) {
-
-    });
-    udp.bind(PORT);
-  }
 
   $rootScope.settings = {
     ip: localStorage.ip,
