@@ -181,7 +181,7 @@ angular.module('starter.controllers', ['hmTouchEvents'])
   }
 })
 
-.controller('MainCtrl', function($scope, $rootScope, $stateParams, $websocket, $ionicModal, $state, CommonService) {
+.controller('MainCtrl', function($scope, $rootScope, $stateParams, $websocket, $ionicModal, $state, CommonService, $timeout) {
   $scope.command = {};
   $scope.otherData = {};
   $scope.deltaX = 0;
@@ -272,7 +272,7 @@ angular.module('starter.controllers', ['hmTouchEvents'])
         $scope.deltaX = 0;
         $scope.deltaY = 0;
       }
-      data.push(2); //0代表调用方法类型，2代表模拟键值指令
+      data.push(2); //2代表模拟键值指令
       data = data.concat(CommonService.stringToBytes(JSON.stringify($scope.command)));
     }else if(type == 'tap'){
       data.push(3);
@@ -333,6 +333,10 @@ angular.module('starter.controllers', ['hmTouchEvents'])
       }
       data = data.concat(CommonService.toUTF8Array(JSON.stringify(teacherClassInfo)));
       CommonService.send(data, $rootScope.soid);
+
+      $timeout(function() {
+            CommonService.send([99, 202, 0], $rootScope.soid);
+          }, 3000);
     }
   });
 
