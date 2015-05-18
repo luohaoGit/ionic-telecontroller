@@ -271,6 +271,7 @@ angular.module('starter.controllers', ['hmTouchEvents'])
       if(event.isFinal){
         $scope.deltaX = 0;
         $scope.deltaY = 0;
+        return;
       }
       data.push(2); //2代表模拟键值指令
       data = data.concat(CommonService.stringToBytes(JSON.stringify($scope.command)));
