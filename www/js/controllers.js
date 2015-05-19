@@ -7,7 +7,7 @@ angular.module('starter.controllers', ['hmTouchEvents'])
 
 })
 
-.controller('LoginCtrl', function($scope, LoginService, UserService, CommonService, $state, $ionicPopup, $ionicLoading, $websocket, $rootScope, $timeout) {
+.controller('LoginCtrl', function($scope, LoginService, UserService, CommonService, $state, $ionicPopup, $ionicLoading, $websocket, $rootScope, $timeout, $interval) {
 
   $scope.loginData = {
     username: localStorage.username,
@@ -91,6 +91,9 @@ angular.module('starter.controllers', ['hmTouchEvents'])
     CommonService.createAndConnect(localStorage.ip, localStorage.port).success(function(soid){
       $ionicLoading.hide();
       $rootScope.soid = soid;
+      $interval(function(){
+        CommonService.detectAndReconnect(soid, localStorage.ip, localStorage.port);
+      }, 5000);
       $state.go('app.main');
     }).error(function(){
       $ionicLoading.hide();
@@ -181,7 +184,7 @@ angular.module('starter.controllers', ['hmTouchEvents'])
   }
 })
 
-.controller('MainCtrl', function($scope, $rootScope, $stateParams, $websocket, $ionicModal, $state, CommonService, $timeout) {
+.controller('MainCtrl', function($scope, $rootScope, $stateParams, $websocket, $ionicModal, $state, CommonService, $timeout, $window) {
   $scope.command = {};
   $scope.otherData = {};
   $scope.deltaX = 0;
@@ -325,7 +328,7 @@ angular.module('starter.controllers', ['hmTouchEvents'])
     }
   });
 
-  $scope.$on("$ionicView.enter", function(){
+  ionic.on("enterMain", function () {
     if($rootScope.settings.showLogin) {
       var data = [99, 201];
       var teacherClassInfo = JSON.parse(localStorage.teacherClassInfo);
@@ -336,9 +339,13 @@ angular.module('starter.controllers', ['hmTouchEvents'])
       CommonService.send(data, $rootScope.soid);
 
       $timeout(function() {
-            CommonService.send([99, 202, 0], $rootScope.soid);
-          }, 3000);
+        CommonService.send([99, 202, 0], $rootScope.soid);
+      }, 3000);
     }
+  });
+
+  $scope.$on("$ionicView.enter", function(){
+    ionic.trigger("enterMain");
   });
 
   // Create the login modal that we will use later
@@ -371,9 +378,7 @@ angular.module('starter.controllers', ['hmTouchEvents'])
   }
 
   $scope.exit = function(){
-    chrome.sockets.tcp.disconnect($rootScope.soid);
-    chrome.sockets.tcp.close($rootScope.soid);
-    ionic.Platform.exitApp();
+    CommonService.exit($rootScope.soid);
   }
 
 });

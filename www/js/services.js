@@ -77,7 +77,7 @@ angular.module('starter.services', [])
     })
 
 
-    .service('CommonService', function($q) {
+    .service('CommonService', function($q, $ionicLoading, $ionicPopup, $rootScope, $timeout, $state) {
         return {
             toUTF8Array: function(str) {
                 var utf8 = [];
@@ -137,6 +137,16 @@ angular.module('starter.services', [])
                 });
             },
 
+            exit: function(soid){
+                var array = [99, 104];
+                var uint8 = new Uint8Array(array);
+                chrome.sockets.tcp.send(soid, uint8.buffer, function(result) {
+                    chrome.sockets.tcp.disconnect($rootScope.soid);
+                    chrome.sockets.tcp.close($rootScope.soid);
+                    ionic.Platform.exitApp();
+                });
+            },
+
             createAndConnect: function(ip, port) {
                 var deferred = $q.defer();
                 var promise = deferred.promise;
@@ -165,6 +175,37 @@ angular.module('starter.services', [])
                     return promise;
                 }
                 return promise;
+            },
+
+            detectAndReconnect: function(soid, ip, port){
+                chrome.sockets.tcp.getInfo(soid, function(info){
+                    if(!info.connected){
+                        $ionicLoading.show({
+                            template: '正在重连...'
+                        });
+                        chrome.sockets.tcp.connect(soid, ip, port,
+                            function(result) {
+                                if (result === 0) {
+                                    ionic.trigger("enterMain");
+                                    $ionicLoading.hide();
+                                    $ionicLoading.show({
+                                        template: '连接成功！',
+                                        duration: 1000
+                                    });
+                                }else{
+                                    $ionicLoading.hide();
+                                    $ionicLoading.show({
+                                        template: '与服务器断开连接！',
+                                        duration: 1000
+                                    });
+                                }
+                            },
+                            function(error){
+
+                            }
+                        );
+                    }
+                });
             }
         }
     })

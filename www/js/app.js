@@ -18,7 +18,7 @@
  */
 angular.module('starter', ['ionic', 'starter.services', 'starter.controllers', 'starter.directives'])
 
-.run(function($ionicPlatform, $rootScope, $location, $ionicHistory) {
+.run(function($ionicPlatform, $rootScope, $location, $ionicHistory, CommonService) {
 
   $rootScope.settings = {
     ip: localStorage.ip,
@@ -34,9 +34,7 @@ angular.module('starter', ['ionic', 'starter.services', 'starter.controllers', '
   $ionicPlatform.registerBackButtonAction(function(e){
     if ($location.path() == '/app/main' || $location.path() == '/app/settings' || $location.path() == '/login') {
       if ($rootScope.backButtonPressedOnceToExit) {
-        chrome.sockets.tcp.disconnect($rootScope.soid);
-        chrome.sockets.tcp.close($rootScope.soid);
-        ionic.Platform.exitApp();
+        CommonService.exit($rootScope.soid);
         return;
       }
       $rootScope.backButtonPressedOnceToExit = true;
