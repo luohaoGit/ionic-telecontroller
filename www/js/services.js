@@ -137,6 +137,10 @@ angular.module('starter.services', [])
                 });
             },
 
+            registerReceive: function(cb){
+                chrome.sockets.tcp.onReceive.addListener(cb);
+            },
+
             exit: function(soid){
                 var array = [99, 104];
                 var uint8 = new Uint8Array(array);
@@ -151,17 +155,31 @@ angular.module('starter.services', [])
                 var deferred = $q.defer();
                 var promise = deferred.promise;
 
+                chrome.sockets.tcp.onReceive.addListener(function(info){
+                    var array = new Uint8Array(info.data);
+                    //var message = String.fromCharCode.apply(null, new Uint8Array(info.data));
+                    if(array[0] == 99 && array[1] == 106 && array[2] == 1){ //[99, 106, 1] 表示有别的连接
+                        deferred.reject(-2);
+                        chrome.sockets.tcp.send($rootScope.soid, new Uint8Array([99, 104]), function(result) {
+                            chrome.sockets.tcp.disconnect($rootScope.soid);
+                            chrome.sockets.tcp.close($rootScope.soid);
+                        });
+                    }else{
+                        deferred.resolve();
+                    }
+                });
+
                 chrome.sockets.tcp.create(function(createInfo) {
                     chrome.sockets.tcp.connect(createInfo.socketId, ip, port,
                         function(result) {
                             if (result === 0) {
-                                deferred.resolve(createInfo.socketId);
+                                $rootScope.soid = createInfo.socketId;
                             }else{
-                                deferred.reject();
+                                deferred.reject(-1);
                             }
                         },
                         function(error){
-                            deferred.reject();
+                            deferred.reject(-1);
                         }
                     );
                 });

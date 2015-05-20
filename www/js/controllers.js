@@ -90,18 +90,25 @@ angular.module('starter.controllers', ['hmTouchEvents'])
 
     CommonService.createAndConnect(localStorage.ip, localStorage.port).success(function(soid){
       $ionicLoading.hide();
-      $rootScope.soid = soid;
       $interval(function(){
         CommonService.detectAndReconnect(soid, localStorage.ip, localStorage.port);
       }, 5000);
       $state.go('app.main');
-    }).error(function(){
+    }).error(function(code){
       $ionicLoading.hide();
-      $ionicPopup.alert({
-        title: '温馨提示',
-        template: '连接失败！',
-        okText: '知道了'
-      });
+      if(code == -2){
+        $ionicPopup.alert({
+          title: '连接失败',
+          template: '已有别的设备连接至服务器，无法直接连接',
+          okText: '知道了'
+        });
+      }else{
+        $ionicPopup.alert({
+          title: '连接失败',
+          template: '请检查您的网络连接和服务器状态',
+          okText: '知道了'
+        });
+      }
     });
   }
 
