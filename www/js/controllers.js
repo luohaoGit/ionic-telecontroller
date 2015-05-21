@@ -86,10 +86,10 @@ angular.module('starter.controllers', ['hmTouchEvents'])
      template: '正在连接...'
     });
 
-    CommonService.createAndConnect(localStorage.ip, localStorage.port).success(function(){
+    CommonService.connect(localStorage.ip, localStorage.port).success(function(){
       $ionicLoading.hide();
       $interval(function(){
-        CommonService.detectAndReconnect(soid, localStorage.ip, localStorage.port);
+        CommonService.detectAndReconnect(localStorage.ip, localStorage.port);
       }, 5000);
       $state.go('app.main');
     }).error(function(code){

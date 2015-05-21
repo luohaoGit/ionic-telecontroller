@@ -34,7 +34,7 @@ angular.module('starter', ['ionic', 'starter.services', 'starter.controllers', '
   $ionicPlatform.registerBackButtonAction(function(e){
     if ($location.path() == '/app/main' || $location.path() == '/app/settings' || $location.path() == '/login') {
       if ($rootScope.backButtonPressedOnceToExit) {
-        CommonService.exit($rootScope.soid);
+        CommonService.exit();
         return;
       }
       $rootScope.backButtonPressedOnceToExit = true;
@@ -52,6 +52,7 @@ angular.module('starter', ['ionic', 'starter.services', 'starter.controllers', '
   },101);
 
   $ionicPlatform.ready(function() {
+    CommonService.create();
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
     if (window.cordova && window.cordova.plugins.Keyboard) {

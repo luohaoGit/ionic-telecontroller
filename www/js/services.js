@@ -141,24 +141,29 @@ angular.module('starter.services', [])
                 chrome.sockets.tcp.onReceive.addListener(cb);
             },
 
-            exit: function(soid){
+            exit: function(){
                 var array = [99, 104];
                 var uint8 = new Uint8Array(array);
-                chrome.sockets.tcp.send(soid, uint8.buffer, function(result) {
+                chrome.sockets.tcp.send($rootScope.soid, uint8.buffer, function(result) {
                     chrome.sockets.tcp.disconnect($rootScope.soid);
                     chrome.sockets.tcp.close($rootScope.soid);
                     ionic.Platform.exitApp();
                 });
             },
 
-            createAndConnect: function(ip, port) {
+            create: function(){
+                chrome.sockets.tcp.create(function(createInfo) {
+                    $rootScope.soid = createInfo.socketId;
+                });
+            },
+
+            connect: function(ip, port) {
                 var deferred = $q.defer();
                 var promise = deferred.promise;
 
                 chrome.sockets.tcp.onReceive.addListener(function(info){
                     var array = new Uint8Array(info.data);
                     //var message = String.fromCharCode.apply(null, new Uint8Array(info.data));
-                    alert(array[0] + "-" + array[1] + "-" + array[2])
                     if(array.length >=3 && array[0] == 99 && array[1] == 106 && array[2] == 1){ //[99, 106, 1] 表示有别的连接
                         deferred.reject(-2);
                     }else{
@@ -166,20 +171,18 @@ angular.module('starter.services', [])
                     }
                 });
 
-                chrome.sockets.tcp.create(function(createInfo) {
-                    chrome.sockets.tcp.connect(createInfo.socketId, ip, port,
-                        function(result) {
-                            if (result === 0) {
-                                $rootScope.soid = createInfo.socketId;
-                            }else{
-                                deferred.reject(-1);
-                            }
-                        },
-                        function(error){
+                chrome.sockets.tcp.connect($rootScope.soid, ip, port,
+                    function(result) {
+                        if (result === 0) {
+
+                        }else{
                             deferred.reject(-1);
                         }
-                    );
-                });
+                    },
+                    function(error){
+                        deferred.reject(-1);
+                    }
+                );
 
                 promise.success = function(fn) {
                     promise.then(fn);
@@ -192,8 +195,8 @@ angular.module('starter.services', [])
                 return promise;
             },
 
-            detectAndReconnect: function(soid, ip, port){
-                chrome.sockets.tcp.getInfo(soid, function(info){
+            detectAndReconnect: function(ip, port){
+                chrome.sockets.tcp.getInfo($rootScope.soid, function(info){
                     if(!info.connected){
                         $ionicLoading.show({
                             template: '正在重连...'
