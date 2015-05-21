@@ -159,49 +159,31 @@ angular.module('starter.services', [])
             connect: function(ip, port) {
                 var deferred = $q.defer();
                 var promise = deferred.promise;
-                var clearConn = function(){
-                    chrome.sockets.tcp.disconnect($rootScope.soid);
-                    chrome.sockets.tcp.close($rootScope.soid);
-                    $rootScope.soid = "";
-                }
 
-                chrome.sockets.tcp.onReceive.listeners = [];
+                //chrome.sockets.tcp.onReceive.listeners = [];
                 chrome.sockets.tcp.onReceive.addListener(function(info){
                     var array = new Uint8Array(info.data);
-                    //var message = String.fromCharCode.apply(null, new Uint8Array(info.data));
                     if(array.length >=3 && array[0] == 99 && array[1] == 106 && array[2] == 1){ //[99, 106, 1] 表示有别的连接
-                        clearConn();
-                        deferred.reject(-104);
+                        deferred.reject(-2);
                     }else{
                         deferred.resolve();
                     }
                 });
 
-                var _connect = function(){
-                    chrome.sockets.tcp.connect($rootScope.soid, ip, port,
-                        function(result) {
-                            if (result === 0) {
-
-                            }else{
-                                clearConn();
-                                deferred.reject(result);
-                            }
-                        },
-                        function(error){
-                            clearConn();
-                            deferred.reject(-1);
+                chrome.sockets.tcp.connect($rootScope.soid, ip, port,
+                    function(result) {
+                        if (result === 0) {
+                            $timeout(function(){
+                                deferred.resolve();
+                            }, 8*1000);
+                        }else{
+                            deferred.reject(result);
                         }
-                    );
-                }
-
-                if($rootScope.soid == ""){
-                    chrome.sockets.tcp.create(function(createInfo) {
-                        $rootScope.soid = createInfo.socketId;
-                        _connect();
-                    });
-                }else{
-                    _connect();
-                }
+                    },
+                    function(error){
+                        deferred.reject(-1);
+                    }
+                );
 
                 promise.success = function(fn) {
                     promise.then(fn);

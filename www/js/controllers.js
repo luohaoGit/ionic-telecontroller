@@ -86,15 +86,19 @@ angular.module('starter.controllers', ['hmTouchEvents'])
      template: '正在连接...'
     });
 
+    $timeout(function(){
+      $ionicLoading.hide();
+    }, 15*1000);
+
     CommonService.connect(localStorage.ip, localStorage.port).success(function(){
       $ionicLoading.hide();
       $interval(function(){
         CommonService.detectAndReconnect(localStorage.ip, localStorage.port);
-      }, 5000);
+      }, 5000)
       $state.go('app.main');
     }).error(function(code){
       $ionicLoading.hide();
-      if(code == -104){
+      if(code == -2){
         $ionicPopup.alert({
           title: '连接失败',
           template: '已有别的设备连接至服务器，无法直接连接',
