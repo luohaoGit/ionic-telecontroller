@@ -94,7 +94,7 @@ angular.module('starter.controllers', ['hmTouchEvents'])
       $state.go('app.main');
     }).error(function(code){
       $ionicLoading.hide();
-      if(code == -2){
+      if(code == -104){
         $ionicPopup.alert({
           title: '连接失败',
           template: '已有别的设备连接至服务器，无法直接连接',
@@ -383,7 +383,8 @@ angular.module('starter.controllers', ['hmTouchEvents'])
   }
 
   $scope.exit = function(){
-    CommonService.exit($rootScope.soid);
+    CommonService.exit();
+    ionic.Platform.exitApp();
   }
 
 });

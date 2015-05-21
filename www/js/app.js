@@ -35,6 +35,7 @@ angular.module('starter', ['ionic', 'starter.services', 'starter.controllers', '
     if ($location.path() == '/app/main' || $location.path() == '/app/settings' || $location.path() == '/login') {
       if ($rootScope.backButtonPressedOnceToExit) {
         CommonService.exit();
+        ionic.Platform.exitApp();
         return;
       }
       $rootScope.backButtonPressedOnceToExit = true;

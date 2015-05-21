@@ -147,7 +147,6 @@ angular.module('starter.services', [])
                 chrome.sockets.tcp.send($rootScope.soid, uint8.buffer, function(result) {
                     chrome.sockets.tcp.disconnect($rootScope.soid);
                     chrome.sockets.tcp.close($rootScope.soid);
-                    ionic.Platform.exitApp();
                 });
             },
 
@@ -160,6 +159,23 @@ angular.module('starter.services', [])
             connect: function(ip, port) {
                 var deferred = $q.defer();
                 var promise = deferred.promise;
+                var clearConn = function(){
+                    chrome.sockets.tcp.disconnect($rootScope.soid);
+                    chrome.sockets.tcp.close($rootScope.soid);
+                    $rootScope.soid = "";
+                }
+
+                chrome.sockets.tcp.onReceive.listeners = [];
+                chrome.sockets.tcp.onReceive.addListener(function(info){
+                    var array = new Uint8Array(info.data);
+                    //var message = String.fromCharCode.apply(null, new Uint8Array(info.data));
+                    if(array.length >=3 && array[0] == 99 && array[1] == 106 && array[2] == 1){ //[99, 106, 1] 表示有别的连接
+                        clearConn();
+                        deferred.reject(-104);
+                    }else{
+                        deferred.resolve();
+                    }
+                });
 
                 var _connect = function(){
                     chrome.sockets.tcp.connect($rootScope.soid, ip, port,
@@ -167,10 +183,12 @@ angular.module('starter.services', [])
                             if (result === 0) {
 
                             }else{
-                                deferred.reject(-1);
+                                clearConn();
+                                deferred.reject(result);
                             }
                         },
                         function(error){
+                            clearConn();
                             deferred.reject(-1);
                         }
                     );
@@ -184,19 +202,6 @@ angular.module('starter.services', [])
                 }else{
                     _connect();
                 }
-
-                chrome.sockets.tcp.onReceive.addListener(function(info){
-                    var array = new Uint8Array(info.data);
-                    //var message = String.fromCharCode.apply(null, new Uint8Array(info.data));
-                    if(array.length >=3 && array[0] == 99 && array[1] == 106 && array[2] == 1){ //[99, 106, 1] 表示有别的连接
-                        chrome.sockets.tcp.disconnect($rootScope.soid);
-                        chrome.sockets.tcp.close($rootScope.soid);
-                        $rootScope.soid = "";
-                        deferred.reject(-2);
-                    }else{
-                        deferred.resolve();
-                    }
-                });
 
                 promise.success = function(fn) {
                     promise.then(fn);
