@@ -1,8 +1,6 @@
 angular.module('starter.controllers', ['hmTouchEvents'])
 
-.controller('AppCtrl', function($scope, $ionicModal, $timeout, $ionicLoading, $ionicPopup, defaultAvatar, $ionicPopover) {
-
-  $scope.defaultAvatar = defaultAvatar;
+.controller('AppCtrl', function($scope, $ionicModal, $timeout, $ionicLoading, $ionicPopup, $ionicPopover) {
   $scope.userData = localStorage.userdata ? JSON.parse(localStorage.userdata) : {};
 
 })
@@ -88,7 +86,7 @@ angular.module('starter.controllers', ['hmTouchEvents'])
      template: '正在连接...'
     });
 
-    CommonService.createAndConnect(localStorage.ip, localStorage.port).success(function(soid){
+    CommonService.createAndConnect(localStorage.ip, localStorage.port).success(function(){
       $ionicLoading.hide();
       $interval(function(){
         CommonService.detectAndReconnect(soid, localStorage.ip, localStorage.port);

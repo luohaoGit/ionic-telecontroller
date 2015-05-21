@@ -158,12 +158,9 @@ angular.module('starter.services', [])
                 chrome.sockets.tcp.onReceive.addListener(function(info){
                     var array = new Uint8Array(info.data);
                     //var message = String.fromCharCode.apply(null, new Uint8Array(info.data));
-                    if(array[0] == 99 && array[1] == 106 && array[2] == 1){ //[99, 106, 1] 表示有别的连接
+                    alert(array[0] + "-" + array[1] + "-" + array[2])
+                    if(array.length >=3 && array[0] == 99 && array[1] == 106 && array[2] == 1){ //[99, 106, 1] 表示有别的连接
                         deferred.reject(-2);
-                        chrome.sockets.tcp.send($rootScope.soid, new Uint8Array([99, 104]), function(result) {
-                            chrome.sockets.tcp.disconnect($rootScope.soid);
-                            chrome.sockets.tcp.close($rootScope.soid);
-                        });
                     }else{
                         deferred.resolve();
                     }
