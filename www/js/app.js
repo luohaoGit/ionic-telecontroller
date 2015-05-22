@@ -54,6 +54,18 @@ angular.module('starter', ['ionic', 'starter.services', 'starter.controllers', '
 
   $ionicPlatform.ready(function() {
     CommonService.create();
+    CommonService.registerReceive(function(info){
+      var array = new Uint8Array(info.data);
+      if(array.length >=3 && array[0] == 99 && array[1] == 106 && array[2] == 1){ //[99, 106, 1] 表示有别的连接
+        ionic.trigger("connectFailed");
+      }else if(array.length >=3 && array[0] == 99 && array[1] == 106 && array[2] == 0){
+        ionic.trigger("connectSucceed");
+      }else{
+        if(array[1] == 100){
+
+        }
+      }
+    });
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
     if (window.cordova && window.cordova.plugins.Keyboard) {

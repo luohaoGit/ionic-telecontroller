@@ -160,27 +160,28 @@ angular.module('starter.services', [])
                 var deferred = $q.defer();
                 var promise = deferred.promise;
 
-                //chrome.sockets.tcp.onReceive.listeners = [];
-                chrome.sockets.tcp.onReceive.addListener(function(info){
-                    var array = new Uint8Array(info.data);
-                    if(array.length >=3 && array[0] == 99 && array[1] == 106 && array[2] == 1){ //[99, 106, 1] 表示有别的连接
-                        deferred.reject(-2);
-                    }else{
-                        deferred.resolve();
-                    }
+                ionic.on("connectFailed", function (e) {
+                    chrome.sockets.tcp.disconnect($rootScope.soid);
+                    deferred.reject(-2);
+                    ionic.off("connectFailed");
+                });
+
+                ionic.on("connectSucceed", function () {
+                    deferred.resolve();
+                    ionic.off("connectSucceed");
                 });
 
                 chrome.sockets.tcp.connect($rootScope.soid, ip, port,
                     function(result) {
                         if (result === 0) {
-                            $timeout(function(){
-                                deferred.resolve();
-                            }, 8*1000);
+
                         }else{
+                            chrome.sockets.tcp.disconnect($rootScope.soid);
                             deferred.reject(result);
                         }
                     },
                     function(error){
+                        chrome.sockets.tcp.disconnect($rootScope.soid);
                         deferred.reject(-1);
                     }
                 );
@@ -202,7 +203,7 @@ angular.module('starter.services', [])
                         $ionicLoading.show({
                             template: '正在重连...'
                         });
-                        chrome.sockets.tcp.connect(soid, ip, port,
+                        chrome.sockets.tcp.connect($rootScope.soid, ip, port,
                             function(result) {
                                 if (result === 0) {
                                     ionic.trigger("enterMain");
