@@ -156,35 +156,41 @@ angular.module('starter.services', [])
                 });
             },
 
-            connect: function(ip, port) {
+            connect: function(ip, port){
                 var deferred = $q.defer();
                 var promise = deferred.promise;
 
-                ionic.on("connectFailed", function (e) {
+                ionic.on("connectFailed", function (e){
                     chrome.sockets.tcp.disconnect($rootScope.soid);
                     deferred.reject(-2);
                     ionic.off("connectFailed");
                 });
 
-                ionic.on("connectSucceed", function () {
+                ionic.on("connectSucceed", function (){
                     deferred.resolve();
                     ionic.off("connectSucceed");
                 });
 
-                chrome.sockets.tcp.connect($rootScope.soid, ip, port,
-                    function(result) {
-                        if (result === 0) {
+                chrome.sockets.tcp.getInfo($rootScope.soid, function(info){
+                    if(!info.connected){
+                        chrome.sockets.tcp.connect($rootScope.soid, ip, port,
+                            function(result){
+                                if (result === 0){
 
-                        }else{
-                            chrome.sockets.tcp.disconnect($rootScope.soid);
-                            deferred.reject(result);
-                        }
-                    },
-                    function(error){
-                        chrome.sockets.tcp.disconnect($rootScope.soid);
-                        deferred.reject(-1);
+                                }else{
+                                    chrome.sockets.tcp.disconnect($rootScope.soid);
+                                    deferred.reject(result);
+                                }
+                            },
+                            function(error){
+                                chrome.sockets.tcp.disconnect($rootScope.soid);
+                                deferred.reject(-1);
+                            }
+                        );
+                    }else{
+                        deferred.resolve();
                     }
-                );
+                });
 
                 promise.success = function(fn) {
                     promise.then(fn);
