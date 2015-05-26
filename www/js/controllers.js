@@ -83,7 +83,7 @@ angular.module('starter.controllers', ['hmTouchEvents'])
 
   $scope.connect = function(){
     $ionicLoading.show({
-     template: '正在连接...'
+      template: '正在连接...'
     });
 
     $timeout(function(){
@@ -102,6 +102,12 @@ angular.module('starter.controllers', ['hmTouchEvents'])
         $ionicPopup.alert({
           title: '连接失败',
           template: '已有别的设备连接至服务器，无法直接连接',
+          okText: '知道了'
+        });
+      }else if(code == -3){
+        $ionicPopup.alert({
+          title: '连接失败',
+          template: "请连接WIFI",
           okText: '知道了'
         });
       }else{
@@ -205,8 +211,8 @@ angular.module('starter.controllers', ['hmTouchEvents'])
     textcontent: "",
     play: false,
     fullscreen: false,
-    onlineAnswer: true,
-    onlineAnswerTxt : "在线答题"
+    onlineAnswer: false,
+    onlineAnswerTxt : "立即测试"
   }
 
   $scope.buttonClick = function (index) {

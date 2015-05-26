@@ -160,37 +160,47 @@ angular.module('starter.services', [])
                 var deferred = $q.defer();
                 var promise = deferred.promise;
 
-                ionic.on("connectFailed", function (e){
-                    chrome.sockets.tcp.disconnect($rootScope.soid);
-                    deferred.reject(-2);
-                    ionic.off("connectFailed");
-                });
+                var _connect = function(){
+                    ionic.on("connectFailed", function (e){
+                        chrome.sockets.tcp.disconnect($rootScope.soid);
+                        deferred.reject(-2);
+                        ionic.off("connectFailed");
+                    });
 
-                ionic.on("connectSucceed", function (){
-                    deferred.resolve();
-                    ionic.off("connectSucceed");
-                });
-
-                chrome.sockets.tcp.getInfo($rootScope.soid, function(info){
-                    if(!info.connected){
-                        chrome.sockets.tcp.connect($rootScope.soid, ip, port,
-                            function(result){
-                                if (result === 0){
-
-                                }else{
-                                    chrome.sockets.tcp.disconnect($rootScope.soid);
-                                    deferred.reject(result);
-                                }
-                            },
-                            function(error){
-                                chrome.sockets.tcp.disconnect($rootScope.soid);
-                                deferred.reject(-1);
-                            }
-                        );
-                    }else{
+                    ionic.on("connectSucceed", function (){
                         deferred.resolve();
+                        ionic.off("connectSucceed");
+                    });
+
+                    chrome.sockets.tcp.getInfo($rootScope.soid, function(info){
+                        if(!info.connected){
+                            chrome.sockets.tcp.connect($rootScope.soid, ip, port,
+                                function(result){
+                                    if (result === 0){
+
+                                    }else{
+                                        chrome.sockets.tcp.disconnect($rootScope.soid);
+                                        deferred.reject(result);
+                                    }
+                                },
+                                function(error){
+                                    chrome.sockets.tcp.disconnect($rootScope.soid);
+                                    deferred.reject(-1);
+                                }
+                            );
+                        }else{
+                            deferred.resolve();
+                        }
+                    });
+                }
+
+                wifiWizard.isWifiEnabled(function(isWifiOn){
+                    if(!isWifiOn){
+                        deferred.reject(-3);
+                    }else{
+                        _connect();
                     }
-                });
+                }, function(){});
 
                 promise.success = function(fn) {
                     promise.then(fn);
@@ -203,35 +213,46 @@ angular.module('starter.services', [])
                 return promise;
             },
 
-            detectAndReconnect: function(ip, port){
-                chrome.sockets.tcp.getInfo($rootScope.soid, function(info){
-                    if(!info.connected){
-                        $ionicLoading.show({
-                            template: '正在重连...'
-                        });
-                        chrome.sockets.tcp.connect($rootScope.soid, ip, port,
-                            function(result) {
-                                if (result === 0) {
-                                    ionic.trigger("enterMain");
-                                    $ionicLoading.hide();
-                                    $ionicLoading.show({
-                                        template: '重连成功！',
-                                        duration: 1000
-                                    });
-                                }else{
-                                    $ionicLoading.hide();
-                                    $ionicLoading.show({
-                                        template: '与服务器断开连接！',
-                                        duration: 1000
-                                    });
-                                }
-                            },
-                            function(error){
+            detectAndReconnect: function(ip, port) {
+                var win = function (isWifiOn) {
+                    if(isWifiOn) {
+                        chrome.sockets.tcp.getInfo($rootScope.soid, function (info) {
+                            if (!info.connected) {
+                                $ionicLoading.show({
+                                    template: '正在重连...'
+                                });
+                                chrome.sockets.tcp.connect($rootScope.soid, ip, port,
+                                    function (result) {
+                                        if (result === 0) {
+                                            ionic.trigger("enterMain");
+                                            $ionicLoading.hide();
+                                            $ionicLoading.show({
+                                                template: '重连成功！',
+                                                duration: 1000
+                                            });
+                                        } else {
+                                            $ionicLoading.hide();
+                                            $ionicLoading.show({
+                                                template: '与服务器断开连接！',
+                                                duration: 1000
+                                            });
+                                        }
+                                    },
+                                    function (error) {
 
+                                    }
+                                );
                             }
-                        );
+                        });
+                    }else{
+                        $ionicLoading.show({
+                            template: '请连接WIFI！',
+                            duration: 1000
+                        });
                     }
-                });
+                }
+
+                wifiWizard.isWifiEnabled(win, function(){});
             }
         }
     })
