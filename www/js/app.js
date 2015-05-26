@@ -61,9 +61,7 @@ angular.module('starter', ['ionic', 'starter.services', 'starter.controllers', '
       }else if(array.length >=3 && array[0] == 99 && array[1] == 106 && array[2] == 0){
         ionic.trigger("connectSucceed");
       }else{
-        if(array[1] == 100){
-
-        }
+        alert(array[0]+  "-" + Uint8Array[1] + "-" + Uint8Array[2])
       }
     });
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard

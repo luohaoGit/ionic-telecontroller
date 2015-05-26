@@ -215,7 +215,7 @@ angular.module('starter.services', [])
                                     ionic.trigger("enterMain");
                                     $ionicLoading.hide();
                                     $ionicLoading.show({
-                                        template: '连接成功！',
+                                        template: '重连成功！',
                                         duration: 1000
                                     });
                                 }else{

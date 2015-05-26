@@ -204,11 +204,13 @@ angular.module('starter.controllers', ['hmTouchEvents'])
   $scope.buttonStates = {
     textcontent: "",
     play: false,
-    fullscreen: false
+    fullscreen: false,
+    onlineAnswer: true,
+    onlineAnswerTxt : "在线答题"
   }
 
   $scope.buttonClick = function (index) {
-    if($scope.curIndex == 3 || $scope.curIndex == 4){
+    if($scope.curIndex == 3){
       var data = [99, 202, index];
       CommonService.send(data, $rootScope.soid);
     }else if($scope.curIndex == 2) {
@@ -234,6 +236,28 @@ angular.module('starter.controllers', ['hmTouchEvents'])
         data.push(6);
       }
       CommonService.send(data, $rootScope.soid);
+    }else if($scope.curIndex == 4){
+      var data = [2];
+
+      if (index == 0) {
+        if($scope.buttonStates.fullscreen){
+          data.push(7);
+        }else{
+          data.push(8);
+        }
+        $scope.buttonStates.fullscreen = !$scope.buttonStates.fullscreen;
+      } else if (index == 1) {
+        data.push(5);
+      } else if (index == 2) {
+        if($scope.buttonStates.play){
+          data.push(9);
+        }else{
+          data.push(10);
+        }
+        $scope.buttonStates.play = !$scope.buttonStates.play;
+      } else if (index == 3) {
+        data.push(6);
+      }
     }
 
   }
