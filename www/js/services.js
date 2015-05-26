@@ -189,7 +189,7 @@ angular.module('starter.services', [])
                                 }
                             );
                         }else{
-                            deferred.resolve();
+                            //deferred.resolve();
                         }
                     });
                 }

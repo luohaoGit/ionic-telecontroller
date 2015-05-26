@@ -218,6 +218,10 @@ angular.module('starter.controllers', ['hmTouchEvents'])
   $scope.buttonClick = function (index) {
     if($scope.curIndex == 3){
       var data = [99, 202, index];
+      if(index == 4){
+        $scope.buttonStates.onlineAnswer = false;
+        $scope.buttonStates.onlineAnswerTxt = "立即测试";
+      }
       CommonService.send(data, $rootScope.soid);
     }else if($scope.curIndex == 4){
         var data = [99, 202];
@@ -245,6 +249,12 @@ angular.module('starter.controllers', ['hmTouchEvents'])
     }
   }
 
+  ionic.on("unfoldOnlineButton", function (e){
+    $scope.showToolbar(3);
+    $scope.buttonStates.onlineAnswer = true;
+    $scope.buttonStates.onlineAnswerTxt = "在线测试";
+  });
+
   $scope.showToolbar = function(index){
     $scope.curIndex = index;
 
@@ -261,7 +271,7 @@ angular.module('starter.controllers', ['hmTouchEvents'])
 
     }else if(index == 5){
       $scope.modal.show();
-      $scope.toolbarShowed = false
+      $scope.toolbarShowed = false;
       return;
     }
 
