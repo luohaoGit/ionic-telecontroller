@@ -189,6 +189,8 @@ angular.module('starter.services', [])
                                 }
                             );
                         }else{
+                            //var uint8 = new Uint8Array([99, 100]);
+                            //chrome.sockets.tcp.send($rootScope.soid, uint8.buffer, function(result) {});
                             //deferred.resolve();
                         }
                     });
