@@ -212,19 +212,19 @@
     }
 
     .backward {
-        background-image: url(./img/button_08.png);
+        background-image: url(./img/button_08a.png);
     }
     .backward.active,
     .backward.activated {
-        background-image: url(./img/button_08a.png);
+        background-image: url(./img/button_08.png);
     }
 
     .forward {
-        background-image: url(./img/button_09.png);
+        background-image: url(./img/button_09a.png);
     }
     .forward.active,
     .forward.activated {
-        background-image: url(./img/button_09a.png);
+        background-image: url(./img/button_09.png);
     }
 
     .shrink {
@@ -319,9 +319,9 @@
                     ng-class="{true: 'shrink', false: 'expand'}[buttonStates.fullscreen]"
                     ng-click="buttonClick(0)"></button>
             <button class="css_btn_class2 button_img backward" ng-click="buttonClick(1)"></button>
-            <button class="css_btn_class2 button_img"
+<!--            <button class="css_btn_class2 button_img"
                     ng-class="{true: 'pause', false: 'play'}[buttonStates.play]"
-                    ng-click="buttonClick(2)"></button>
+                    ng-click="buttonClick(2)"></button>-->
             <button class="css_btn_class2 button_img forward" ng-click="buttonClick(3)"></button>
         </div>
     </div>

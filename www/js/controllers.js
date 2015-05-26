@@ -219,53 +219,30 @@ angular.module('starter.controllers', ['hmTouchEvents'])
     if($scope.curIndex == 3){
       var data = [99, 202, index];
       CommonService.send(data, $rootScope.soid);
-    }else if($scope.curIndex == 2) {
-      var data = [2];
+    }else if($scope.curIndex == 4){
+        var data = [99, 202];
 
-      if (index == 0) {
-        if ($scope.buttonStates.fullscreen) {
-          data.push(7);
-        } else {
-          data.push(8);
-        }
-        $scope.buttonStates.fullscreen = !$scope.buttonStates.fullscreen;
-      } else if (index == 1) {
-        data.push(5);
-      } else if (index == 2) {
-        if ($scope.buttonStates.play) {
-          data.push(9);
-        } else {
-          data.push(10);
-        }
-        $scope.buttonStates.play = !$scope.buttonStates.play;
+        if (index == 0) {
+          if($scope.buttonStates.fullscreen){
+            data.push(14);//取消全屏
+          }else{
+            data.push(11);
+          }
+          $scope.buttonStates.fullscreen = !$scope.buttonStates.fullscreen;
+        } else if (index == 1) {
+          data.push(12);
+        } else if (index == 2) {
+          if($scope.buttonStates.play){
+            data.push(9);
+          }else{
+            data.push(10);
+          }
+          $scope.buttonStates.play = !$scope.buttonStates.play;
       } else if (index == 3) {
-        data.push(6);
+        data.push(13);
       }
       CommonService.send(data, $rootScope.soid);
-    }else if($scope.curIndex == 4){
-      var data = [2];
-
-      if (index == 0) {
-        if($scope.buttonStates.fullscreen){
-          data.push(7);
-        }else{
-          data.push(8);
-        }
-        $scope.buttonStates.fullscreen = !$scope.buttonStates.fullscreen;
-      } else if (index == 1) {
-        data.push(5);
-      } else if (index == 2) {
-        if($scope.buttonStates.play){
-          data.push(9);
-        }else{
-          data.push(10);
-        }
-        $scope.buttonStates.play = !$scope.buttonStates.play;
-      } else if (index == 3) {
-        data.push(6);
-      }
     }
-
   }
 
   $scope.showToolbar = function(index){
@@ -403,6 +380,11 @@ angular.module('starter.controllers', ['hmTouchEvents'])
 
   $scope.changeMode = function(){
     localStorage.leftHandMode = $rootScope.settings.leftHandMode;
+  }
+
+  $scope.reset = function(){
+    var data = [99, 202, 10];
+    CommonService.send(data, $rootScope.soid);
   }
 
   $scope.$watch('settings.sensitivity', function(newVal){
