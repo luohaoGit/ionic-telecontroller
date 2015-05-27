@@ -16,11 +16,15 @@ angular.module('starter.controllers', ['hmTouchEvents'])
     localStorage.leftHandMode = newVal;
   });
 
-  $scope.loginFailed = function(){
+  $scope.loginFailed = function(type){
+    var msg = "请检查您的用户名和密码";
+    if(type == 0){
+      msg = "获取班级信息失败";
+    }
     $ionicLoading.hide();
     $ionicPopup.alert({
       title: '登录失败',
-      template: '请检查您的用户名和密码'
+      template: msg
     });
   }
 
@@ -186,11 +190,11 @@ angular.module('starter.controllers', ['hmTouchEvents'])
               localStorage.teacherClassInfo = JSON.stringify(teacherClassInfo);
               $scope.showClass(handinclass);
             }).error(function(err){
-              $scope.loginFailed();
+              $scope.loginFailed(0);
             });
           }
         }).error(function (data) {
-          $scope.loginFailed();
+          $scope.loginFailed(1);
         });
       }
     }else{
