@@ -166,29 +166,33 @@ angular.module('starter.controllers', ['hmTouchEvents'])
             localStorage.userdata = JSON.stringify(data.retObj[0]);
             UserService.getClassInfo().success(function(classInfo){
               var tea = classInfo.data;
-
               var teaClasses = tea.handinclass;
               var handinclass = [];
-              for(var i=0; i<teaClasses.length; i++){
-                var c = teaClasses[i];
-                var clazz = {
-                  subjectId: c.subjectid,
-                  subjectName: c.subjectname,
-                  classId: c.classid,
-                  className: c.classname,
-                  checked: i == 0 ? true : false
+
+              if(teaClasses != null) {
+                for (var i = 0; i < teaClasses.length; i++) {
+                  var c = teaClasses[i];
+                  var clazz = {
+                    subjectId: c.subjectid,
+                    subjectName: c.subjectname,
+                    classId: c.classid,
+                    className: c.classname,
+                    checked: i == 0 ? true : false
+                  }
+                  handinclass.push(clazz);
                 }
-                handinclass.push(clazz);
-              }
 
-              var teacherClassInfo = {
-                userId: tea.username,
-                userName: tea.truename,
-                handinclass: handinclass
-              }
+                var teacherClassInfo = {
+                  userId: tea.username,
+                  userName: tea.truename,
+                  handinclass: handinclass
+                }
 
-              localStorage.teacherClassInfo = JSON.stringify(teacherClassInfo);
-              $scope.showClass(handinclass);
+                localStorage.teacherClassInfo = JSON.stringify(teacherClassInfo);
+                $scope.showClass(handinclass);
+              }else{
+                $scope.loginFailed(0);
+              }
             }).error(function(err){
               $scope.loginFailed(0);
             });
