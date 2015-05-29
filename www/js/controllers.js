@@ -218,9 +218,9 @@ angular.module('starter.controllers', ['hmTouchEvents'])
   $scope.buttonStates = {
     textcontent: "",
     play: false,
-    fullscreen: false,
+    fullscreen: true,
     onlineAnswer: false,
-    onlineAnswerTxt : "立即测试"
+    autoAnswer: true
   }
 
   $scope.buttonClick = function (index) {
@@ -228,7 +228,13 @@ angular.module('starter.controllers', ['hmTouchEvents'])
       var data = [99, 202, index];
       if(index == 4){
         $scope.buttonStates.onlineAnswer = false;
-        $scope.buttonStates.onlineAnswerTxt = "立即测试";
+      }else if(index == -1){
+        if($scope.buttonStates.autoAnswer){
+          data[2] = 5;
+        }else{
+          data[2] = 9;
+        }
+        $scope.buttonStates.autoAnswer = !$scope.buttonStates.autoAnswer;
       }
       CommonService.send(data, $rootScope.soid);
     }else if($scope.curIndex == 4){
@@ -236,9 +242,9 @@ angular.module('starter.controllers', ['hmTouchEvents'])
 
         if (index == 0) {
           if($scope.buttonStates.fullscreen){
-            data.push(14);//取消全屏
-          }else{
             data.push(11);
+          }else{
+            data.push(14);//取消全屏
           }
           $scope.buttonStates.fullscreen = !$scope.buttonStates.fullscreen;
         } else if (index == 1) {
@@ -260,7 +266,6 @@ angular.module('starter.controllers', ['hmTouchEvents'])
   ionic.on("unfoldOnlineButton", function (e){
     $scope.showToolbar(3);
     $scope.buttonStates.onlineAnswer = true;
-    $scope.buttonStates.onlineAnswerTxt = "在线测试";
   });
 
   $scope.showToolbar = function(index){
