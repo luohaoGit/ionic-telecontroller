@@ -415,9 +415,11 @@ angular.module('starter.controllers', ['hmTouchEvents'])
   });
 
   $scope.logout = function(){
+    $scope.closeModel();
     localStorage.removeItem("userdata");
     localStorage.removeItem("token");
     localStorage.removeItem("password");
+    CommonService.exit();
     $state.go('login');
   }
 
