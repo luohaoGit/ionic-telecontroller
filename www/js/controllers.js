@@ -20,6 +20,8 @@ angular.module('starter.controllers', ['hmTouchEvents'])
     var msg = "请检查您的用户名和密码";
     if(type == 0){
       msg = "获取班级信息失败";
+    }else if(type == 2){
+      msg = "网络访问失败";
     }
     $ionicLoading.hide();
     $ionicPopup.alert({
@@ -198,7 +200,7 @@ angular.module('starter.controllers', ['hmTouchEvents'])
             });
           }
         }).error(function (data) {
-          $scope.loginFailed(1);
+          $scope.loginFailed(data);
         });
       }
     }else{

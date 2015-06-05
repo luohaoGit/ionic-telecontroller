@@ -21,10 +21,10 @@ angular.module('starter.services', [])
                             if(res.retCode == '0'){//登录成功
                                 deferred.resolve(res);
                             }else{
-                                deferred.reject();
+                                deferred.reject(1);
                             }
                         }).error(function(data) {
-                            deferred.reject();
+                            deferred.reject(2);
                         });
                 }, function(){});
 
