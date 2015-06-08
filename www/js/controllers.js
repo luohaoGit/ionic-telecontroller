@@ -98,9 +98,9 @@ angular.module('starter.controllers', ['hmTouchEvents'])
 
     CommonService.connect(localStorage.ip, localStorage.port).success(function(){
       $ionicLoading.hide();
-      $interval(function(){
+      $rootScope.reConTimer = $interval(function(){
         CommonService.detectAndReconnect(localStorage.ip, localStorage.port);
-      }, 5000)
+      }, 5000);
       $state.go('app.main');
     }).error(function(code){
       $ionicLoading.hide();
@@ -209,7 +209,7 @@ angular.module('starter.controllers', ['hmTouchEvents'])
   }
 })
 
-.controller('MainCtrl', function($scope, $rootScope, $stateParams, $websocket, $ionicModal, $state, CommonService, $timeout, $window) {
+.controller('MainCtrl', function($scope, $rootScope, $stateParams, $websocket, $ionicModal, $state, CommonService, $timeout, $window, $interval) {
   $scope.command = {};
   $scope.otherData = {};
   $scope.deltaX = 0;
@@ -421,7 +421,9 @@ angular.module('starter.controllers', ['hmTouchEvents'])
     localStorage.removeItem("userdata");
     localStorage.removeItem("token");
     localStorage.removeItem("password");
+    $interval.cancel($rootScope.reConTimer);
     CommonService.exit();
+    CommonService.create();
     $state.go('login');
   }
 
