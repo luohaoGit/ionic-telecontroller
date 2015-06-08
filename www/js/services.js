@@ -13,10 +13,11 @@ angular.module('starter.services', [])
 
                 window.tlantic.plugins.socket.des(name + separator + pw, function(res){
                     var arr = res.split(separator);
-                    username += arr[0];
-                    pwd += arr[1];
+                    username += encodeURIComponent(arr[0]);
+                    pwd += encodeURIComponent(arr[1]);
                     //3023002==741506
-                    $http.post(loginUrl + reqContent + username + pwd)
+                    var requestUrl = loginUrl + reqContent + username + pwd;
+                    $http.post(requestUrl)
                         .success(function(res){
                             if(res.retCode == '0'){//登录成功
                                 deferred.resolve(res);
