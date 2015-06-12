@@ -374,7 +374,7 @@ angular.module('starter.controllers', ['hmTouchEvents'])
       var data = [99, 201];
       var teacherClassInfo = JSON.parse(localStorage.teacherClassInfo);
       if(teacherClassInfo.handinclass.length > 1){
-        teacherClassInfo.handinclass = $rootScope.selectedClass;
+        teacherClassInfo.handinclass = [$rootScope.selectedClass];
       }
       data = data.concat(CommonService.toUTF8Array(JSON.stringify(teacherClassInfo)));
       CommonService.send(data, $rootScope.soid);
